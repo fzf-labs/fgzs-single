@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="web" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="fgzs-single" />
+    <working_directory value="$PROJECT_DIR$/internal/app/web" />
+    <kind value="PACKAGE" />
+    <package value="fgzs-single/internal/app/web" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/internal/app/web/web.go" />
+    <method v="2" />
+  </configuration>
+</component>

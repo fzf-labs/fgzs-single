@@ -1,0 +1,32 @@
+syntax = "v1"
+
+info(
+    title: "file"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    FileUploadReq {
+        Storage string `form:"storage"`           //存储方式
+        FileCategory string `form:"category"` //文件目录
+    }
+    FileUploadResp {
+        ID int64 `json:"id"`//id
+    }
+)
+
+@server(
+    group : file
+    prefix : file
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "文件-文件上传"
+    )
+    @handler FileUpload     //文件上传-单文件上传
+    post /file/upload (FileUploadReq) returns (FileUploadResp)
+}

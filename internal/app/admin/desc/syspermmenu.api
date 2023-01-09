@@ -1,0 +1,121 @@
+syntax = "v1"
+
+info(
+    title: "权限菜单"
+    desc: "权限菜单"
+    author: ""
+    email: ""
+)
+
+type (
+    SysPermMenu {
+        Id int64 `json:"id"`                                                             // ID
+        Pid int64 `json:"pid"`                                                           // 上级菜单
+        Type string `json:"type"`                                                        // 类型:menu_dir=菜单目录,menu=菜单项,button=页面按钮
+        Title string `json:"title"`                                                      // 标题
+        Name string `json:"name"`                                                        // 规则名称
+        Path string `json:"path"`                                                        // 路由路径
+        Icon string `json:"icon"`                                                        // 图标
+        MenuType string `json:"menu_type"`                                               // 菜单类型:tab=选项卡,link=链接,iframe=Iframe
+        URL string `json:"url"`                                                          // Url
+        Component string `json:"component"`                                              // 组件路径
+        Keepalive int32 `json:"keepalive"`                                               // 缓存:0=关闭,1=开启
+        Extend string `json:"extend"`                                                    // 扩展属性:none=无,add_rules_only=只添加为路由,add_menu_only=只添加为菜单
+        Remark string `json:"remark"`                                                    // 备注
+        Sort int64 `json:"sort"`                                                         // 权重(排序)
+        Status int32 `json:"status"`                                                     // 状态:0=禁用,1=启用
+        CreatedAt string `json:"createdAt"`                                              // 创建时间
+        UpdatedAt string `json:"updatedAt"`                                              // 更新时间
+        Children []SysPermMenu `json:"children"`
+    }
+    SysPermMenuListReq {
+    }
+    SysPermMenuListResp {
+        List []SysPermMenu `json:"list"`
+    }
+)
+
+type (
+    SysPermMenuInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                           //菜单id
+    }
+    SysPermMenuInfoResp {
+        Info SysPermMenu `json:"info"`
+    }
+)
+
+
+
+type (
+    SysPermMenuStoreReq {
+        Id int64 `json:"id,optional"`                                                    // ID
+        Pid int64 `json:"pid"`                                                           // 上级菜单
+        Type string `json:"type"`                                                        // 类型:menu_dir=菜单目录,menu=菜单项,button=页面按钮
+        Title string `json:"title"`                                                      // 标题
+        Name string `json:"name"`                                                        // 规则名称
+        Path string `json:"path"`                                                        // 路由路径
+        Icon string `json:"icon"`                                                        // 图标
+        MenuType string `json:"menu_type"`                                               // 菜单类型:tab=选项卡,link=链接,iframe=Iframe
+        URL string `json:"url"`                                                          // Url
+        Component string `json:"component"`                                              // 组件路径
+        Keepalive int32 `json:"keepalive"`                                               // 缓存:0=关闭,1=开启
+        Extend string `json:"extend"`                                                    // 扩展属性:none=无,add_rules_only=只添加为路由,add_menu_only=只添加为菜单
+        Remark string `json:"remark"`                                                    // 备注
+        Sort int64 `json:"sort"`                                                         // 权重(排序)
+        Status int32 `json:"status"`                                                     // 状态:0=禁用,1=启用
+    }
+    SysPermMenuStoreResp {
+    }
+)
+
+type (
+    SysPermMenuDelReq {
+        Ids []int64 `json:"ids"`                           //菜单id
+    }
+    SysPermMenuDelResp {
+    }
+)
+type (
+    SysPermMenuStatusReq {
+        Id int64 `json:"id"`                                                    // ID
+        Status int32 `json:"status"`                                            //状态
+    }
+    SysPermMenuStatusResp {
+    }
+)
+
+@server(
+    group : sys/permmenu
+    prefix : /sys/permmenu
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "权限菜单列表"
+    )
+    @handler SysPermMenuList
+    post /list (SysPermMenuListReq) returns (SysPermMenuListResp)
+
+    @doc(
+        summary: "单个权限菜单"
+    )
+    @handler SysPermMenuInfo
+    post /info (SysPermMenuInfoReq) returns (SysPermMenuInfoResp)
+
+    @doc(
+        summary: "保存权限菜单"
+    )
+    @handler SysPermMenuStore
+    post /store (SysPermMenuStoreReq) returns (SysPermMenuStoreResp)
+
+    @doc(
+        summary: "删除权限菜单"
+    )
+    @handler SysPermMenuDel
+    post /del (SysPermMenuDelReq) returns (SysPermMenuDelResp)
+    @doc(
+        summary: "修改权限菜单状态"
+    )
+    @handler SysPermMenuStatus
+    post /status (SysPermMenuStatusReq) returns (SysPermMenuStatusResp)
+}

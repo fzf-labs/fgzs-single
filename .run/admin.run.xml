@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="admin" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="fgzs-single" />
+    <working_directory value="$PROJECT_DIR$/internal/app/admin" />
+    <kind value="PACKAGE" />
+    <package value="fgzs-single/internal/app/admin" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/internal/app/admin/admin.go" />
+    <method v="2" />
+  </configuration>
+</component>

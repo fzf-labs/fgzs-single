@@ -1,0 +1,96 @@
+syntax = "v1"
+
+info(
+    title: "岗位"
+    desc: "岗位"
+    author: ""
+    email: ""
+)
+
+
+
+type (
+    SysJobInfo {
+        ID int64 `json:"id"`                                            // 编号
+        Name string `json:"name"`                                       // 岗位名称
+        Code string `json:"code"`                                       //岗位编码
+        Remark string `json:"remark"`                                   //备注
+        Status int32 `json:"status"`                                    // 0=禁用 1=开启
+        Sort int64 `json:"sort"`                                        // 排序值
+        CreatedAt string `json:"createdAt"`                             // 创建时间
+        UpdatedAt string `json:"updatedAt"`                             // 更新时间
+    }
+    SysJobListReq {
+        Page int `json:"page"`                            //页码
+        PageSize int `json:"pageSize"`                    //页大小
+        QuickSearch string `json:"quick_search,optional"` //快捷搜索
+        Order string `json:"order,optional"`              //排序
+        Search []SearchParam `json:"search,optional"`     //搜索参数
+    }
+    SysJobListResp {
+        List []SysJobInfo `json:"list"`//岗位列表
+        Paginator Paginator `json:"paginator"`  //分页
+    }
+)
+
+type (
+    SysJobInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //岗位id
+    }
+    SysJobInfoResp {
+        Info SysJobInfo `json:"info"`
+    }
+)
+
+
+type (
+    SysJobStoreReq {
+        Id int64 `json:"id,optional" validate:"omitempty,number,gte=1"`                                           //id
+        Name string `json:"name"`                                                                                 //岗位名称
+        Code string `json:"code,optional"`                                                                        //岗位编码
+        Remark string `json:"remark,optional"`                                                                    //备注
+        Sort int64 `json:"sort,optional"`                                                                         //排序值
+        Status int32 `json:"status"`                                                                              //0=禁用 1=开启
+    }
+    SysJobStoreResp {
+    }
+)
+
+type (
+    SysJobDelReq {
+        Ids []int64 `json:"ids"`//岗位ids
+    }
+    SysJobDelResp {
+    }
+)
+
+@server(
+    group : sys/job
+    prefix : /sys/job
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "岗位列表"
+    )
+    @handler SysJobList
+    post /list (SysJobListReq) returns (SysJobListResp)
+
+    @doc(
+        summary: "单个岗位"
+    )
+    @handler SysJobInfo
+    post /info (SysJobInfoReq) returns (SysJobInfoResp)
+
+    @doc(
+        summary: "保存岗位"
+    )
+    @handler SysJobStore
+    post /store (SysJobStoreReq) returns (SysJobStoreResp)
+
+    @doc(
+        summary: "删除岗位"
+    )
+    @handler SysJobDel
+    post /del (SysJobDelReq) returns (SysJobDelReq)
+}

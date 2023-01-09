@@ -1,0 +1,82 @@
+syntax = "v1"
+
+info(
+    title: "管理员日志"
+    desc: ""
+    author: ""
+    email: ""
+)
+
+type (
+    SysLog {
+        ID int64 `json:"id"`                                                          // 编号
+        AdminID int64 `json:"adminId"`                                                // 管理员ID
+        Username string `json:"username"`                                             // 账号
+        IP string `json:"ip"`                                                         // ip
+        URI string `json:"uri"`                                                       // 请求路径
+        UriDesc string `json:"uriDesc"`                                               // 请求描述
+        Useragent string `json:"useragent"`                                           // 浏览器标识
+        HTTPCode int32 `json:"httpCode"`                                              // 响应编码
+        Req string `json:"req"`                                                       // 请求数据
+        Resp string `json:"resp"`                                                     // 响应数据
+        CreatedAt string `json:"createdAt"`                                           // 创建时间
+    }
+)
+
+type (
+    SysLogOwnListReq {
+        Page int `json:"page"`                        //页码
+        PageSize int `json:"pageSize"`                //页大小
+    }
+    SysLogOwnListResp {
+        List []SysLog `json:"list"`//列表
+        Paginator Paginator `json:"paginator"`
+    }
+)
+
+type (
+    SysLogListReq {
+        Page int `json:"page"`                            //页码
+        PageSize int `json:"pageSize"`                    //页大小
+        QuickSearch string `json:"quick_search,optional"` //快捷搜索
+        Search []SearchParam `json:"search,optional"`     //搜索条件
+    }
+    SysLogListResp {
+        List []SysLog `json:"list"`//列表
+        Paginator Paginator `json:"paginator"`
+    }
+)
+
+
+type (
+    SysLogInfoReq {
+        Id int64 `json:"id" validate:"number"`                         //id
+    }
+    SysLogInfoResp {
+        Info SysLog `json:"info"`
+    }
+)
+
+@server(
+    group : sys/log
+    prefix : /sys/log
+    middleware: JwtMiddleware,AuthMiddleware
+)
+service admin {
+    @doc(
+        summary: "自身日志列表"
+    )
+    @handler SysLogOwnList
+    post /ownlist (SysLogOwnListReq) returns (SysLogOwnListResp)
+
+    @doc(
+        summary: "日志列表"
+    )
+    @handler SysLogList
+    post /list (SysLogListReq) returns (SysLogListResp)
+    @doc(
+        summary: "单条日志"
+    )
+    @handler SysLogInfo
+    post /info (SysLogInfoReq) returns (SysLogInfoResp)
+}

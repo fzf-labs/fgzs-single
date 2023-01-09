@@ -1,0 +1,160 @@
+syntax = "v1"
+
+info(
+    title: "系统-用户"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    SysAdminLoginReq {
+        CaptchaId string `json:"captchaId"`      //验证码id
+        VerifyCode string `json:"verifyCode"`    //验证码
+        Username string `json:"username"`        //账号
+        Password string `json:"password"`        //密码
+    }
+    SysAdminLoginResp {
+        Token string `json:"token"`         //token
+        ExpiredAt int64 `json:"expiredAt"`  //过期时间
+        RefreshAt int64 `json:"refreshAt"`  //刷新时间
+    }
+)
+
+type (
+    SysAdminLoginCaptchaReq {
+    }
+    SysAdminLoginCaptchaResp {
+        CaptchaId string `json:"captchaId"`  //验证码ID
+        CaptchaImg string `json:"captchaImg"`//验证码图片
+    }
+)
+
+type (
+    SysAdminLogoutReq {
+    }
+    SysAdminLogoutResp {
+    }
+)
+
+@server(
+    group : sys/admin
+    prefix : /sys/admin
+)
+service admin {
+    @doc(
+        summary: "登录验证码"
+    )
+    @handler SysAdminLoginCaptcha
+    get /login/captcha (SysAdminLoginCaptchaReq) returns (SysAdminLoginCaptchaResp)
+
+    @doc(
+        summary: "登录"
+    )
+    @handler SysAdminLogin
+    post /login (SysAdminLoginReq) returns (SysAdminLoginResp)
+
+
+    @doc(
+        summary: "退出"
+    )
+    @handler SysAdminLogout
+    post /logout (SysAdminLogoutReq) returns (SysAdminLogoutResp)
+}
+
+
+type (
+    SysAdminInfo {
+        ID int64 `json:"id"`                                                       // ID
+        Username string `json:"username"`                                          // 账号
+        Nickname string `json:"nickname"`                                          // 昵称
+        Avatar string `json:"avatar"`                                              // 头像
+        Gender int32 `json:"gender"`                                               // 0=保密 1=女 2=男
+        Email string `json:"email"`                                                // 邮件
+        Mobile string `json:"mobile"`                                              // 手机号
+        JobID int64 `json:"job_id"`                                                // 岗位
+        DeptID int64 `json:"dept_id"`                                              // 部门
+        RoleIds []int64 `json:"role_ids"`                                          // 角色集
+        Motto string `json:"motto"`                                                // 个性签名
+    }
+    SysAdminInfoReq {
+    }
+    SysAdminInfoResp {
+        Info SysAdminInfo `json:"info"` //用户信息
+    }
+)
+
+type (
+    SysAdminInfoUpdateReq {
+        Nickname string `json:"nickname"`                                          //昵称
+        Email string `json:"email"`                                                //邮件
+        Mobile string `json:"mobile"`                                              //手机号
+        Motto string `json:"motto"`                                                //个性签名
+        Password string `json:"password"`                                          //密码
+    }
+    SysAdminInfoUpdateResp {
+
+    }
+)
+
+
+
+type (
+    SysAdminMenu {
+        ID int64 `json:"id"`                                                    // ID
+        Pid int64 `json:"pid"`                                                  // 上级菜单
+        Type string `json:"type"`                                               // 类型:menu_dir=菜单目录,menu=菜单项,button=页面按钮
+        Title string `json:"title"`                                             // 标题
+        Name string `json:"name"`                                               // 规则名称
+        Path string `json:"path"`                                               // 路由路径
+        Icon string `json:"icon"`                                               // 图标
+        MenuType string `json:"menu_type"`                                      // 菜单类型:tab=选项卡,link=链接,iframe=Iframe
+        URL string `json:"url"`                                                 // Url
+        Component string `json:"component"`                                     // 组件路径
+        Extend string `json:"extend"`                                           // 扩展属性:none=无,add_rules_only=只添加为路由,add_menu_only=只添加为菜单
+        children []SysAdminMenu `json:"children"`
+    }
+    SysAdminPermMenuReq {
+    }
+    SysAdminPermMenuResp {
+        Menus []SysAdminMenu `json:"menus"`  //菜单集合
+    }
+)
+
+type (
+    SysAdminGenerateAvatarReq {
+    }
+    SysAdminGenerateAvatarResp {
+        AvatarUrl string `json:"avatarUrl"`//头像地址
+    }
+)
+
+@server(
+    group : sys/admin
+    prefix : /sys/admin
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "管理员信息"
+    )
+    @handler SysAdminInfo
+    get /info (SysAdminInfoReq) returns (SysAdminInfoResp)
+    @doc(
+        summary: "管理员信息"
+    )
+    @handler SysAdminInfoUpdate
+    post /info/update (SysAdminInfoUpdateReq) returns (SysAdminInfoUpdateResp)
+    @doc(
+        summary: "菜单权限"
+    )
+    @handler SysAdminPermMenu
+    get /permmenu (SysAdminPermMenuReq) returns (SysAdminPermMenuResp)
+
+    @doc(
+        summary: "生成头像"
+    )
+    @handler SysAdminGenerateAvatar
+    get /avatar/generate (SysAdminGenerateAvatarReq) returns (SysAdminGenerateAvatarResp)
+}

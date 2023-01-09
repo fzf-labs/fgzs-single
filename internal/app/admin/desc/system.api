@@ -1,0 +1,69 @@
+syntax = "v1"
+
+info(
+    title: "system"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    PingReq struct {
+    }
+    PingResp struct {
+    }
+)
+
+type (
+    Runtime struct {
+        GoVersion string `json:"goVersion"`     //golang 版本
+        NpmVersion string `json:"npmVersion"`   //npm 版本
+        NodeVersion string `json:"nodeVersion"` //node 版本
+        Os string `json:"os"`                   //系统
+        Arch string `json:"arch"`               //架构
+    }
+    Cpu struct {
+        VendorID string `json:"vendorId"`      //CPU制造商ID
+        ModelName string `json:"modelName"`    //cpu具体型号
+        Cores int32 `json:"cores"`             //核心数
+        CoresLoad []float64 `json:"coresLoad"` //核心占用
+    }
+    Disk struct {
+        Total int64 `json:"total"`               //总占用
+        Available int64 `json:"available"`       //可用的
+        Used int64 `json:"used"`                 //已使用
+        UsedPercent float64 `json:"usedPercent"` //使用占比
+    }
+    Memory struct {
+        Total int64 `json:"total"`               //总占用
+        Available int64 `json:"available"`       //可用的
+        Used int64 `json:"used"`                 //已使用
+        UsedPercent float64 `json:"usedPercent"` //使用占比
+    }
+    StatReq struct {
+    }
+    StatResp struct {
+        Cpu Cpu `json:"cpu"`            //cpu
+        Disk Disk `json:"disk"`         //磁盘
+        Memory Memory `json:"memory"`   //内存
+        Runtime Runtime `json:"runtime"`//运行
+    }
+)
+
+@server(
+    group: system
+)
+service admin {
+    @doc(
+        summary: "ping"
+    )
+    @handler ping //ping
+    get /ping (PingReq) returns (PingResp)
+
+    @doc(
+        summary: "服务器状态"
+    )
+    @handler stat //stat
+    get /stat (StatReq) returns (StatResp)
+}

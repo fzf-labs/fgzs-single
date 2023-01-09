@@ -1,0 +1,26 @@
+# 程序和插件的二进制文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# 测试二进制文件，使用 `go test -c` 构建
+*.test
+
+# go 覆盖工具的输出.
+*.out
+
+# 代码编辑器隐藏文件
+.idea
+.vscode
+
+#本地配置文件忽略
+internal/app/admin/etc/admin.yaml
+internal/app/web/etc/web.yaml
+
+#编译后文件
+bin
+
+#其他业务文件
+storage/assets

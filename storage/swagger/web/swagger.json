@@ -1,0 +1,98 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "web",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "ping",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PingResp"
+            }
+          }
+        },
+        "tags": [
+          "system"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Paginator": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "第几页"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "页大小"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32",
+          "description": "总数"
+        },
+        "prevPage": {
+          "type": "integer",
+          "format": "int32",
+          "description": "上一页"
+        },
+        "nextPage": {
+          "type": "integer",
+          "format": "int32",
+          "description": "下一页"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int32",
+          "description": "总页数"
+        }
+      },
+      "title": "Paginator",
+      "required": [
+        "page",
+        "pageSize",
+        "total",
+        "prevPage",
+        "nextPage",
+        "totalPage"
+      ]
+    },
+    "PingReq": {
+      "type": "object",
+      "title": "PingReq"
+    },
+    "PingResp": {
+      "type": "object",
+      "title": "PingResp"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

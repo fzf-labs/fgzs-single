@@ -1,0 +1,112 @@
+syntax = "v1"
+
+info(
+    title: "管理员管理"
+    desc: "type desc here"
+    author: "type author here"
+    email: "type email here"
+    version: "type version here"
+)
+
+
+type SysManageInfo {
+    Id int64 `json:"id"`
+    Username string `json:"username"`                                               // 账号
+    Nickname string `json:"nickname"`                                               // 昵称
+    Avatar string `json:"avatar"`                                                   // 头像
+    Gender int32 `json:"gender"`                                                    // 0=保密 1=女 2=男
+    Email string `json:"email"`                                                     // 邮件
+    Mobile string `json:"mobile"`                                                   // 手机号
+    JobID int64 `json:"jobId"`                                                      // 岗位
+    DeptID int64 `json:"deptId"`                                                    // 部门
+    RoleIds []int64 `json:"roleIds"`                                                // 角色集
+    JobName string `json:"jobName"`                                                 // 岗位
+    DeptName string `json:"deptName"`                                               // 部门
+    RoleNames []string `json:"roleNames"`                                           // 角色名称集
+    Motto string `json:"motto"`                                                     // 个性签名
+    Status int32 `json:"status"`                                                    //状态
+    CreatedAt string `json:"createdAt"`                                             //创建时间
+    UpdatedAt string `json:"updatedAt"`                                             //更新时间
+}
+
+type (
+    SysManageListReq {
+        Page int `json:"page"`
+        PageSize int `json:"pageSize"`
+        QuickSearch string `json:"quick_search,optional"`
+        Search []SearchParam `json:"search,optional"`
+    }
+    SysManageListResp {
+        List []SysManageInfo `json:"list"`     //管理员列表
+        Paginator Paginator `json:"paginator"` //分页
+    }
+)
+
+type (
+    SysManageInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //管理员id
+    }
+    SysManageInfoResp {
+        Info SysManageInfo `json:"info"`
+    }
+)
+
+type (
+    SysManageStoreReq {
+        Id int64 `json:"id,optional" validate:"omitempty,number,gte=1"`                                                                                      //id
+        Username string `json:"username" validate:"min=3,max=50"`                                                                                            // 账号
+        Nickname string `json:"nickname" validate:"min=3,max=50"`                                                                                            // 昵称
+        Password string `json:"password,optional" validate:"omitempty,min=6,max=18"`                                                                         // 密码
+        Avatar string `json:"avatar,optional"`                                                                                                               // 头像
+        Gender int32 `json:"gender,optional"`                                                                                                                // 0=保密 1=女 2=男
+        Email string `json:"email,optional"`                                                                                                                 // 邮件
+        Mobile string `json:"mobile,optional"`                                                                                                               // 手机号
+        JobID int64 `json:"jobId,optional"`                                                                                                                  // 岗位
+        DeptID int64 `json:"deptId,optional"`                                                                                                                // 部门
+        RoleIds []int64 `json:"roleIds,optional"`                                                                                                            // 角色集
+        Motto string `json:"motto,optional"`                                                                                                                 // 个性签名
+        Status int32 `json:"status"`                                                                                                                         //状态
+    }
+    SysManageStoreResp {
+    }
+)
+
+type (
+    SysManageDelReq {
+        Ids []int64 `json:"ids"`//角色ids
+    }
+    SysManageDelResp {
+    }
+)
+
+
+@server(
+    group : sys/manage
+    prefix : /sys/manage
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "管理员列表"
+    )
+    @handler SysManageList
+    post /list (SysManageListReq) returns (SysManageListResp)
+
+    @doc(
+        summary: "单个管理员"
+    )
+    @handler SysManageInfo
+    post /info (SysManageInfoReq) returns (SysManageInfoResp)
+
+    @doc(
+        summary: "保存管理员"
+    )
+    @handler SysManageStore
+    post /store (SysManageStoreReq) returns (SysManageStoreResp)
+
+    @doc(
+        summary: "删除管理员"
+    )
+    @handler SysManageDel
+    post /del (SysManageDelReq) returns (SysManageDelReq)
+}

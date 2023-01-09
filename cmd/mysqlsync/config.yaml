@@ -1,0 +1,13 @@
+#源数据库
+Source:
+  User: "root",
+  Pass: "source",
+  Host: "127.0.0.1",
+#目标数据库
+Target:
+  User: "root",
+  Pass: "target",
+  Host: "127.0.0.1",
+#库
+Database:
+  -

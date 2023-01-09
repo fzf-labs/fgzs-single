@@ -1,0 +1,33 @@
+syntax = "v1"
+
+info(
+    title: "控制台"
+    desc: "dashboard"
+    author: ""
+    email: ""
+    version: ""
+)
+
+
+type (
+    DashboardSpeechReq {
+    }
+    DashboardSpeechResp {
+        Word string `json:"word"`
+    }
+)
+
+
+
+@server(
+    group : dashboard
+    prefix : dashboard
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "言语"
+    )
+    @handler DashboardSpeech
+    get /speech (DashboardSpeechReq) returns (DashboardSpeechResp)
+}

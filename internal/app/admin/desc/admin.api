@@ -1,0 +1,35 @@
+syntax = "v1"
+import (
+	"system.api"
+	"dashboard.api"
+	"sysdept.api"
+	"sysjob.api"
+	"syspermmenu.api"
+	"sysrole.api"
+	"sysadmin.api"
+	"sysmanage.api"
+	"syslog.api"
+	"file.api"
+)
+info(
+	title: "admin"
+	desc: ""
+	author: ""
+	email: ""
+	version: ""
+)
+
+type Paginator {
+	Page      int `json:"page"`      //第几页
+	PageSize  int `json:"pageSize"`  //页大小
+	Total     int `json:"total"`     //总数
+	PrevPage  int `json:"prevPage"`  //上一页
+	NextPage  int `json:"nextPage"`  //下一页
+	TotalPage int `json:"totalPage"` //总页数
+}
+
+type SearchParam {
+	Field    string `json:"field"`    //字段
+	Val      string `json:"val"`      //值
+	Operator string `json:"operator"` //操作
+}
