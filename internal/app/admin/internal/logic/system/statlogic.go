@@ -4,12 +4,14 @@ import (
 	"context"
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"
+	"fgzs-single/pkg/conv"
 	"fgzs-single/pkg/util/cmdutil"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/zeromicro/go-zero/core/logx"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -54,7 +56,7 @@ func (l *StatLogic) Stat(req *types.StatReq) (resp *types.StatResp, err error) {
 	Cpu := types.Cpu{
 		VendorID:  "",
 		ModelName: "",
-		Cores:     0,
+		Cores:     "",
 		CoresLoad: nil,
 	}
 	cpuInfo, err := cpu.Info()
@@ -64,7 +66,7 @@ func (l *StatLogic) Stat(req *types.StatReq) (resp *types.StatResp, err error) {
 	if len(cpuInfo) > 0 {
 		Cpu.VendorID = cpuInfo[0].VendorID
 		Cpu.ModelName = cpuInfo[0].ModelName
-		Cpu.Cores = cpuInfo[0].Cores
+		Cpu.Cores = strconv.Itoa(int(cpuInfo[0].Cores))
 	}
 	coresLoad, err := cpu.Percent(time.Duration(200)*time.Millisecond, true)
 	if err != nil {
@@ -77,20 +79,20 @@ func (l *StatLogic) Stat(req *types.StatReq) (resp *types.StatResp, err error) {
 		return nil, err
 	}
 	resp.Memory = types.Memory{
-		Total:       int64(int(memory.Total) / MB),
-		Used:        int64(int(memory.Used) / MB),
-		Available:   int64(int(memory.Available) / MB),
-		UsedPercent: memory.UsedPercent,
+		Total:       strconv.Itoa(int(memory.Total)/MB) + " MB",
+		Used:        strconv.Itoa(int(memory.Used)/MB) + " MB",
+		Available:   strconv.Itoa(int(memory.Available)/MB) + " MB",
+		UsedPercent: strconv.Itoa(conv.Int(memory.UsedPercent)) + "%",
 	}
 	usage, err := disk.Usage("/")
 	if err != nil {
 		return nil, err
 	}
 	resp.Disk = types.Disk{
-		Total:       int64(int(usage.Total) / MB),
-		Used:        int64(int(usage.Used) / MB),
-		Available:   int64(int(usage.Free) / MB),
-		UsedPercent: usage.UsedPercent,
+		Total:       strconv.Itoa(int(usage.Total)/MB) + " MB",
+		Used:        strconv.Itoa(int(usage.Used)/MB) + " MB",
+		Available:   strconv.Itoa(int(usage.Free)/MB) + " MB",
+		UsedPercent: strconv.Itoa(conv.Int(usage.UsedPercent)) + "%",
 	}
 	return
 }

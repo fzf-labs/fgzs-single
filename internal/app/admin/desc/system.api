@@ -26,20 +26,20 @@ type (
     Cpu struct {
         VendorID string `json:"vendorId"`      //CPU制造商ID
         ModelName string `json:"modelName"`    //cpu具体型号
-        Cores int32 `json:"cores"`             //核心数
+        Cores string `json:"cores"`             //核心数
         CoresLoad []float64 `json:"coresLoad"` //核心占用
     }
     Disk struct {
-        Total int64 `json:"total"`               //总占用
-        Available int64 `json:"available"`       //可用的
-        Used int64 `json:"used"`                 //已使用
-        UsedPercent float64 `json:"usedPercent"` //使用占比
+        Total string `json:"total"`               //总占用
+        Available string `json:"available"`       //可用的
+        Used string `json:"used"`                 //已使用
+        UsedPercent string `json:"usedPercent"` //使用占比
     }
     Memory struct {
-        Total int64 `json:"total"`               //总占用
-        Available int64 `json:"available"`       //可用的
-        Used int64 `json:"used"`                 //已使用
-        UsedPercent float64 `json:"usedPercent"` //使用占比
+        Total string `json:"total"`               //总占用
+        Available string `json:"available"`       //可用的
+        Used string `json:"used"`                 //已使用
+        UsedPercent string `json:"usedPercent"` //使用占比
     }
     StatReq struct {
     }
@@ -60,7 +60,14 @@ service admin {
     )
     @handler ping //ping
     get /ping (PingReq) returns (PingResp)
+}
 
+@server(
+    group : system
+    prefix : /system
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
     @doc(
         summary: "服务器状态"
     )

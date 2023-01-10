@@ -4,12 +4,14 @@ import (
 	"context"
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
+	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/pkg/util/jsonutil"
 	"fgzs-single/pkg/util/sliutil"
 	"gorm.io/gorm"
+	"strconv"
 
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"
@@ -35,78 +37,91 @@ func NewSysAdminPermMenuLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 func (l *SysAdminPermMenuLogic) SysAdminPermMenu(req *types.SysAdminPermMenuReq) (*types.SysAdminPermMenuResp, error) {
 	resp := new(types.SysAdminPermMenuResp)
 	adminId := meta.GetAdminId(l.ctx)
-	sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
-	sysRoleDao := dao.Use(l.svcCtx.Gorm).SysRole
-	sysPermMenuDao := dao.Use(l.svcCtx.Gorm).SysPermMenu
-	//获取用户角色->获取用户权限->树状结构
-	sysAdmin, err := sysAdminDao.WithContext(l.ctx).Where(sysAdminDao.ID.Eq(adminId)).First()
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errorx.DataSqlErr.WithDetail(err)
-	}
-	if sysAdmin.RoleIds == nil {
-		return nil, errorx.UserNotBoundRole
-	}
-	roleIds := make([]int64, 0)
-	err = jsonutil.Decode(sysAdmin.RoleIds, &roleIds)
+	cacheKey := cachekey.SysAdminPermmenu.BuildCacheKey(strconv.FormatInt(adminId, 10))
+	var result []types.SysAdminMenu
+	err := cacheKey.AutoCache(l.svcCtx.Redis, &result, func() (string, error) {
+		sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
+		sysRoleDao := dao.Use(l.svcCtx.Gorm).SysRole
+		sysPermMenuDao := dao.Use(l.svcCtx.Gorm).SysPermMenu
+		//获取用户角色->获取用户权限->树状结构
+		sysAdmin, err := sysAdminDao.WithContext(l.ctx).Where(sysAdminDao.ID.Eq(adminId)).First()
+		if err != nil && err != gorm.ErrRecordNotFound {
+			return "", errorx.DataSqlErr.WithDetail(err)
+		}
+		if sysAdmin.RoleIds == nil {
+			return "", errorx.UserNotBoundRole
+		}
+		roleIds := make([]int64, 0)
+		err = jsonutil.Decode(sysAdmin.RoleIds, &roleIds)
+		if err != nil {
+			return "", err
+		}
+		sysRoles, err := sysRoleDao.WithContext(l.ctx).Where(sysRoleDao.ID.In(roleIds...)).Find()
+		if err != nil && err != gorm.ErrRecordNotFound {
+			return "", errorx.DataSqlErr.WithDetail(err)
+		}
+		if len(sysRoles) == 0 {
+			return "", errorx.UserNotBoundRole
+		}
+		var super bool
+		permMenuIds := make([]int64, 0)
+		for _, role := range sysRoles {
+			if role.PermMenuIds == "" {
+				continue
+			}
+			if role.PermMenuIds == "*" {
+				super = true
+				break
+			}
+			int64s, err := sliutil.SplitStringToInt64(role.PermMenuIds)
+			if err != nil {
+				return "", err
+			}
+			permMenuIds = append(permMenuIds, int64s...)
+		}
+		var sysPermMenus []*model.SysPermMenu
+		if super {
+			sysPermMenus, err = sysPermMenuDao.WithContext(l.ctx).Where(sysPermMenuDao.Status.Eq(constant.StatusEnable)).Find()
+			if err != nil {
+				return "", err
+			}
+		} else {
+			permMenuIds = sliutil.Unique(permMenuIds)
+			sysPermMenus, err = sysPermMenuDao.WithContext(l.ctx).Where(sysPermMenuDao.ID.In(permMenuIds...), sysPermMenuDao.Status.Eq(constant.StatusEnable)).Find()
+			if err != nil {
+				return "", err
+			}
+		}
+		if len(sysPermMenus) == 0 {
+			return "", errorx.UserNotBoundRole
+		}
+		menus := make([]types.SysAdminMenu, 0)
+		for _, v := range sysPermMenus {
+			menus = append(menus, types.SysAdminMenu{
+				ID:        v.ID,
+				Pid:       v.Pid,
+				Type:      v.Type,
+				Title:     v.Title,
+				Name:      v.Name,
+				Path:      v.Path,
+				Icon:      v.Icon,
+				MenuType:  v.MenuType,
+				URL:       v.URL,
+				Component: v.Component,
+				Extend:    v.Extend,
+			})
+		}
+		menus = sysAdminMenuGenerateTree(menus)
+		toString, err := jsonutil.EncodeToString(menus)
+		if err != nil {
+			return "", err
+		}
+		return toString, nil
+	})
 	if err != nil {
 		return nil, err
 	}
-	sysRoles, err := sysRoleDao.WithContext(l.ctx).Where(sysRoleDao.ID.In(roleIds...)).Find()
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errorx.DataSqlErr.WithDetail(err)
-	}
-	if len(sysRoles) == 0 {
-		return nil, errorx.UserNotBoundRole
-	}
-	var super bool
-	permMenuIds := make([]int64, 0)
-	for _, role := range sysRoles {
-		if role.PermMenuIds == "" {
-			continue
-		}
-		if role.PermMenuIds == "*" {
-			super = true
-			break
-		}
-		int64s, err := sliutil.SplitStringToInt64(role.PermMenuIds)
-		if err != nil {
-			return nil, err
-		}
-		permMenuIds = append(permMenuIds, int64s...)
-	}
-	var sysPermMenus []*model.SysPermMenu
-	if super {
-		sysPermMenus, err = sysPermMenuDao.WithContext(l.ctx).Where(sysPermMenuDao.Status.Eq(constant.StatusEnable)).Find()
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		permMenuIds = sliutil.Unique(permMenuIds)
-		sysPermMenus, err = sysPermMenuDao.WithContext(l.ctx).Where(sysPermMenuDao.ID.In(permMenuIds...), sysPermMenuDao.Status.Eq(constant.StatusEnable)).Find()
-		if err != nil {
-			return nil, err
-		}
-	}
-	if len(sysPermMenus) == 0 {
-		return nil, errorx.UserNotBoundRole
-	}
-	menus := make([]types.SysAdminMenu, 0)
-	for _, v := range sysPermMenus {
-		menus = append(menus, types.SysAdminMenu{
-			ID:        v.ID,
-			Pid:       v.Pid,
-			Type:      v.Type,
-			Title:     v.Title,
-			Name:      v.Name,
-			Path:      v.Path,
-			Icon:      v.Icon,
-			MenuType:  v.MenuType,
-			URL:       v.URL,
-			Component: v.Component,
-			Extend:    v.Extend,
-		})
-	}
-	resp.Menus = sysAdminMenuGenerateTree(menus)
+	resp.Menus = result
 	return resp, nil
 }
 

@@ -6,10 +6,12 @@ import (
 	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
+	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/pkg/crypt"
 	"gorm.io/gorm"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -52,6 +54,11 @@ func (l *SysAdminInfoUpdateLogic) SysAdminInfoUpdate(req *types.SysAdminInfoUpda
 	})
 	if err != nil {
 		return nil, errorx.DataSqlErr.WithDetail(err)
+	}
+	cacheKey := cachekey.SysAdminInfo.BuildCacheKey(strconv.FormatInt(adminId, 10))
+	err = cacheKey.Delete(l.svcCtx.Redis)
+	if err != nil {
+		return nil, errorx.DataRedisErr.WithDetail(err)
 	}
 	return
 }

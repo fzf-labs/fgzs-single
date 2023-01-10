@@ -33,22 +33,22 @@ type Runtime struct {
 type Cpu struct {
 	VendorID  string    `json:"vendorId"`  //CPU制造商ID
 	ModelName string    `json:"modelName"` //cpu具体型号
-	Cores     int32     `json:"cores"`     //核心数
+	Cores     string    `json:"cores"`     //核心数
 	CoresLoad []float64 `json:"coresLoad"` //核心占用
 }
 
 type Disk struct {
-	Total       int64   `json:"total"`       //总占用
-	Available   int64   `json:"available"`   //可用的
-	Used        int64   `json:"used"`        //已使用
-	UsedPercent float64 `json:"usedPercent"` //使用占比
+	Total       string `json:"total"`       //总占用
+	Available   string `json:"available"`   //可用的
+	Used        string `json:"used"`        //已使用
+	UsedPercent string `json:"usedPercent"` //使用占比
 }
 
 type Memory struct {
-	Total       int64   `json:"total"`       //总占用
-	Available   int64   `json:"available"`   //可用的
-	Used        int64   `json:"used"`        //已使用
-	UsedPercent float64 `json:"usedPercent"` //使用占比
+	Total       string `json:"total"`       //总占用
+	Available   string `json:"available"`   //可用的
+	Used        string `json:"used"`        //已使用
+	UsedPercent string `json:"usedPercent"` //使用占比
 }
 
 type StatReq struct {
@@ -497,4 +497,31 @@ type FileUploadReq struct {
 
 type FileUploadResp struct {
 	ID int64 `json:"id"` //id
+}
+
+type FileInfo struct {
+	Id               int64  `json:"id"`
+	FileCategory     string `json:"fileCategory"`     // 文件分类
+	FileName         string `json:"fileName"`         // 文件新名称
+	OriginalFileName string `json:"originalFileName"` // 文件原名称
+	Storage          string `json:"storage"`          // 存储方式
+	Path             string `json:"path"`             // 文件路径
+	Ext              string `json:"ext"`              // 文件类型
+	Size             int64  `json:"size"`             // 文件大小
+	Status           int32  `json:"status"`           // 状态(1 正常 2冻结)
+	CreatedAt        string `json:"createdAt"`        // 创建时间
+	UpdatedAt        string `json:"updatedAt"`        // 更新时间
+}
+
+type FileListReq struct {
+	Page        int           `json:"page"`                  //页码
+	PageSize    int           `json:"pageSize"`              //页大小
+	QuickSearch string        `json:"quick_search,optional"` //快捷搜索
+	Order       string        `json:"order,optional"`        //排序
+	Search      []SearchParam `json:"search,optional"`       //搜索参数
+}
+
+type FileListResp struct {
+	List      []FileInfo `json:"list"`      //文件列表
+	Paginator Paginator  `json:"paginator"` //分页
 }

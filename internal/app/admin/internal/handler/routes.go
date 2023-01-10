@@ -27,12 +27,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/ping",
 				Handler: system.PingHandler(serverCtx),
 			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/stat",
-				Handler: system.StatHandler(serverCtx),
-			},
 		},
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware, serverCtx.AuthMiddleware, serverCtx.SysLogMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/stat",
+					Handler: system.StatHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/system"),
 	)
 
 	server.AddRoutes(
@@ -281,6 +290,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodPost,
 					Path:    "/file/upload",
 					Handler: file.FileUploadHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/file/list",
+					Handler: file.FileListHandler(serverCtx),
 				},
 			}...,
 		),

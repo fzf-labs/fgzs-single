@@ -32,23 +32,6 @@
         ]
       }
     },
-    "/stat": {
-      "get": {
-        "summary": "服务器状态",
-        "operationId": "stat",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/StatResp"
-            }
-          }
-        },
-        "tags": [
-          "system"
-        ]
-      }
-    },
     "/sys/admin/avatar/generate": {
       "get": {
         "summary": "生成头像",
@@ -846,6 +829,23 @@
         ]
       }
     },
+    "/system/stat": {
+      "get": {
+        "summary": "服务器状态",
+        "operationId": "stat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/StatResp"
+            }
+          }
+        },
+        "tags": [
+          "system"
+        ]
+      }
+    },
     "dashboard/speech": {
       "get": {
         "summary": "言语",
@@ -860,6 +860,33 @@
         },
         "tags": [
           "dashboard"
+        ]
+      }
+    },
+    "file/file/list": {
+      "post": {
+        "summary": "文件-文件列表",
+        "operationId": "FileList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FileListReq"
+            }
+          }
+        ],
+        "tags": [
+          "file"
         ]
       }
     },
@@ -904,8 +931,7 @@
           "description": "cpu具体型号"
         },
         "cores": {
-          "type": "integer",
-          "format": "int32",
+          "type": "string",
           "description": "核心数"
         },
         "coresLoad": {
@@ -944,23 +970,19 @@
       "type": "object",
       "properties": {
         "total": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "总占用"
         },
         "available": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "可用的"
         },
         "used": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "已使用"
         },
         "usedPercent": {
-          "type": "number",
-          "format": "double",
+          "type": "string",
           "description": "使用占比"
         }
       },
@@ -970,6 +992,127 @@
         "available",
         "used",
         "usedPercent"
+      ]
+    },
+    "FileInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fileCategory": {
+          "type": "string",
+          "description": " 文件分类"
+        },
+        "fileName": {
+          "type": "string",
+          "description": " 文件新名称"
+        },
+        "originalFileName": {
+          "type": "string",
+          "description": " 文件原名称"
+        },
+        "storage": {
+          "type": "string",
+          "description": " 存储方式"
+        },
+        "path": {
+          "type": "string",
+          "description": " 文件路径"
+        },
+        "ext": {
+          "type": "string",
+          "description": " 文件类型"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 文件大小"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 状态(1 正常 2冻结)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": " 创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": " 更新时间"
+        }
+      },
+      "title": "FileInfo",
+      "required": [
+        "id",
+        "fileCategory",
+        "fileName",
+        "originalFileName",
+        "storage",
+        "path",
+        "ext",
+        "size",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FileListReq": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "页码"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "页大小"
+        },
+        "quick_search": {
+          "type": "string",
+          "description": "快捷搜索"
+        },
+        "order": {
+          "type": "string",
+          "description": "排序"
+        },
+        "search": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchParam"
+          },
+          "description": "搜索参数"
+        }
+      },
+      "title": "FileListReq",
+      "required": [
+        "page",
+        "pageSize"
+      ]
+    },
+    "FileListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FileInfo"
+          },
+          "description": "文件列表"
+        },
+        "paginator": {
+          "$ref": "#/definitions/Paginator",
+          "description": "分页"
+        }
+      },
+      "title": "FileListResp",
+      "required": [
+        "list",
+        "paginator"
       ]
     },
     "FileUploadReq": {
@@ -1008,23 +1151,19 @@
       "type": "object",
       "properties": {
         "total": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "总占用"
         },
         "available": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "可用的"
         },
         "used": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "已使用"
         },
         "usedPercent": {
-          "type": "number",
-          "format": "double",
+          "type": "string",
           "description": "使用占比"
         }
       },

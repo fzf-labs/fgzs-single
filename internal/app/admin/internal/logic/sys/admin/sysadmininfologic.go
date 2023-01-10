@@ -3,10 +3,12 @@ package admin
 import (
 	"context"
 	"fgzs-single/internal/dal/dao"
+	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/pkg/util/jsonutil"
 	"gorm.io/gorm"
+	"strconv"
 
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"
@@ -31,31 +33,43 @@ func NewSysAdminInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SysA
 func (l *SysAdminInfoLogic) SysAdminInfo(req *types.SysAdminInfoReq) (*types.SysAdminInfoResp, error) {
 	resp := new(types.SysAdminInfoResp)
 	adminId := meta.GetAdminId(l.ctx)
-	sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
-	sysAdmin, err := sysAdminDao.WithContext(l.ctx).Where(sysAdminDao.ID.Eq(adminId)).First()
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errorx.DataSqlErr.WithDetail(err)
-	}
-	if sysAdmin.Status != 1 {
-		return nil, errorx.AccountIsBanned
-	}
-	roleIds := make([]int64, 0)
-	err = jsonutil.Decode(sysAdmin.RoleIds, &roleIds)
+	cacheKey := cachekey.SysAdminInfo.BuildCacheKey(strconv.FormatInt(adminId, 10))
+	var result types.SysAdminInfo
+	err := cacheKey.AutoCache(l.svcCtx.Redis, &result, func() (string, error) {
+		sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
+		sysAdmin, err := sysAdminDao.WithContext(l.ctx).Where(sysAdminDao.ID.Eq(adminId)).First()
+		if err != nil && err != gorm.ErrRecordNotFound {
+			return "", errorx.DataSqlErr.WithDetail(err)
+		}
+		if sysAdmin.Status != 1 {
+			return "", errorx.AccountIsBanned
+		}
+		roleIds := make([]int64, 0)
+		err = jsonutil.Decode(sysAdmin.RoleIds, &roleIds)
+		if err != nil {
+			return "", errorx.DataFormattingError.WithDetail(err)
+		}
+		res, err := jsonutil.EncodeToString(types.SysAdminInfo{
+			ID:       sysAdmin.ID,
+			Username: sysAdmin.Username,
+			Nickname: sysAdmin.Nickname,
+			Avatar:   sysAdmin.Avatar,
+			Gender:   sysAdmin.Gender,
+			Email:    sysAdmin.Email,
+			Mobile:   sysAdmin.Mobile,
+			JobID:    sysAdmin.JobID,
+			DeptID:   sysAdmin.DeptID,
+			RoleIds:  roleIds,
+			Motto:    sysAdmin.Motto,
+		})
+		if err != nil {
+			return "", err
+		}
+		return res, nil
+	})
 	if err != nil {
-		return nil, errorx.DataFormattingError.WithDetail(err)
+		return nil, err
 	}
-	resp.Info = types.SysAdminInfo{
-		ID:       sysAdmin.ID,
-		Username: sysAdmin.Username,
-		Nickname: sysAdmin.Nickname,
-		Avatar:   sysAdmin.Avatar,
-		Gender:   sysAdmin.Gender,
-		Email:    sysAdmin.Email,
-		Mobile:   sysAdmin.Mobile,
-		JobID:    sysAdmin.JobID,
-		DeptID:   sysAdmin.DeptID,
-		RoleIds:  roleIds,
-		Motto:    sysAdmin.Motto,
-	}
+	resp.Info = result
 	return resp, nil
 }
