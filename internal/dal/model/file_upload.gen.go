@@ -22,6 +22,7 @@ type FileUpload struct {
 	Path             string         `gorm:"column:path" json:"path"`                                      // 文件路径
 	Ext              string         `gorm:"column:ext" json:"ext"`                                        // 文件类型
 	Size             int64          `gorm:"column:size" json:"size"`                                      // 文件大小
+	Sha1             string         `gorm:"column:sha1" json:"sha1"`                                      // 文件sha1值
 	Status           int32          `gorm:"column:status;not null;default:1" json:"status"`               // 状态(1 正常 2冻结)
 	CreatedAt        time.Time      `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"createdAt"` // 创建时间
 	UpdatedAt        time.Time      `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updatedAt"` // 更新时间

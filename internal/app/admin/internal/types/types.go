@@ -525,3 +525,18 @@ type FileListResp struct {
 	List      []FileInfo `json:"list"`      //文件列表
 	Paginator Paginator  `json:"paginator"` //分页
 }
+
+type FileInfoReq struct {
+	Id int64 `json:"id" validate:"number,gte=1"` //id
+}
+
+type FileInfoResp struct {
+	Info FileInfo `json:"info"`
+}
+
+type FileDelReq struct {
+	Ids []int64 `json:"ids"` //文件ids
+}
+
+type FileDelResp struct {
+}

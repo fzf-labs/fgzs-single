@@ -29,8 +29,8 @@ type (
         Ext string `json:"ext"`                                        // 文件类型
         Size int64 `json:"size"`                                       // 文件大小
         Status int32 `json:"status"`                                   // 状态(1 正常 2冻结)
-        CreatedAt string `json:"createdAt"`                         // 创建时间
-        UpdatedAt string `json:"updatedAt"`                         // 更新时间
+        CreatedAt string `json:"createdAt"`                            // 创建时间
+        UpdatedAt string `json:"updatedAt"`                            // 更新时间
     }
     FileListReq {
         Page int `json:"page"`                            //页码
@@ -46,9 +46,27 @@ type (
 )
 
 
+type (
+    FileInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //id
+    }
+    FileInfoResp {
+        Info FileInfo `json:"info"`
+    }
+)
+
+type (
+    FileDelReq{
+        Ids []int64 `json:"ids"`//文件ids
+    }
+    FileDelResp{
+    }
+)
+
+
 @server(
     group : file
-    prefix : file
+    prefix : /file
     middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
 )
 service admin {
@@ -56,11 +74,24 @@ service admin {
         summary: "文件-文件上传"
     )
     @handler FileUpload     //文件上传-单文件上传
-    post /file/upload (FileUploadReq) returns (FileUploadResp)
+    post /upload (FileUploadReq) returns (FileUploadResp)
+
 
     @doc(
         summary: "文件-文件列表"
     )
     @handler FileList     //文件-文件列表
-    post /file/list (FileListReq) returns (FileListResp)
+    post /list (FileListReq) returns (FileListResp)
+
+    @doc(
+        summary: "文件-文件信息"
+    )
+    @handler FileInfo     //文件-文件信息
+    post /info (FileInfoReq) returns (FileInfoResp)
+
+    @doc(
+        summary: "文件-文件删除"
+    )
+    @handler FileDel     //文件-文件删除
+    post /del (FileDelReq) returns (FileDelResp)
 }

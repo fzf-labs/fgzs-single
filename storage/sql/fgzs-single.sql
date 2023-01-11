@@ -64,12 +64,13 @@ CREATE TABLE `file_upload` (
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件路径',
   `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件类型',
   `size` bigint DEFAULT NULL COMMENT '文件大小',
+  `sha1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件sha1值',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(1 正常 2冻结)',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件-上传';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件-上传';
 CREATE TABLE `payment_record` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
@@ -125,7 +126,7 @@ CREATE TABLE `sys_api` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-工作岗位';
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-工作岗位';
 CREATE TABLE `sys_dept` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
@@ -182,7 +183,7 @@ CREATE TABLE `sys_log` (
   `resp` json DEFAULT NULL COMMENT '响应数据',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
+) ENGINE=InnoDB AUTO_INCREMENT=850 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
 CREATE TABLE `sys_perm_menu` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '上级菜单',
@@ -204,7 +205,7 @@ CREATE TABLE `sys_perm_menu` (
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `sort` (`sort`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单和权限规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单和权限规则表';
 CREATE TABLE `sys_role` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '父级id',

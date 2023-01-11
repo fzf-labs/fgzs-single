@@ -2,21 +2,21 @@ package main
 
 import (
 	"database/sql"
+	"fgzs-single/pkg/conv"
 	"fgzs-single/pkg/util/fileutil"
-	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/spf13/viper"
+	"path"
 	"strings"
 )
 
-var dsn = flag.String("dsn", "", "dsn")
-
 func main() {
-	flag.Parse()
-	dsnStr := *dsn
-	database := dsnStr[strings.LastIndex(dsnStr, "/")+1:]
+	dsn := GetDsn("internal/app/admin/etc/admin.yaml")
+	dsn = dsn[:strings.LastIndex(dsn, "?")]
+	database := dsn[strings.LastIndex(dsn, "/")+1:]
 	//连接数据库
-	db := ConnectDB(dsnStr)
+	db := ConnectDB(dsn)
 	defer db.Close()
 	var tables []string
 	//查所有的table
@@ -64,4 +64,20 @@ func ConnectDB(dsn string) *sql.DB {
 		fmt.Printf("mysql connect failed, detail is [%v]", err.Error())
 	}
 	return db
+}
+
+func GetDsn(fileName string) string {
+	fileDir := path.Dir(fileName)
+	filePathBase := path.Base(fileName)
+	fileExt := path.Ext(fileName)
+	filePrefix := filePathBase[0 : len(filePathBase)-len(fileExt)]
+	config := viper.New()
+	config.AddConfigPath(fileDir)    //设置读取的文件路径
+	config.SetConfigName(filePrefix) //设置读取的文件名
+	config.SetConfigType("yaml")     //设置文件的类型
+	//尝试进行配置读取
+	if err := config.ReadInConfig(); err != nil {
+		panic(err)
+	}
+	return conv.String(config.Get("Gorm.DataSourceName"))
 }

@@ -4,7 +4,6 @@ BASEDIR = $(shell pwd)
 export GOPATH := $(shell go env GOPATH)
 export GOPROXY := https://goproxy.cn/,direct
 
-DSN="root:123456@tcp(0.0.0.0:3306)/fgzs_single"
 versionDir = "pkg/version"
 gitBranch = $(shell git rev-parse --abbrev-ref HEAD)
 gitCommit = $(shell git rev-parse HEAD)
@@ -69,8 +68,8 @@ swagger:
 .PHONY: gormgen
 # make gormgen 生成gorm模型文件和Sql DDL
 gormgen:
-	@go run ./cmd/gormgen/main.go -dsn ${DSN}
-	@go run ./cmd/sqldump/main.go -dsn ${DSN}
+	@go run ./cmd/gormgen/main.go
+	@go run ./cmd/sqldump/main.go
 
 .PHONY: errcode
 # make errcode 生成错误码

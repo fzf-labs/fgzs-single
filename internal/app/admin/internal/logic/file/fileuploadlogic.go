@@ -41,7 +41,7 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 	}
 	defer file.Close()
 	originalFileName := strings.ToLower(fileHeader.Filename)
-	fileName := uuidutil.GenUUID()
+	fileName := uuidutil.KSUidByTime()
 	ext := fileutil.Ext(originalFileName)
 	path := BuildPath(req.FileCategory, fileName, ext)
 	switch req.Storage {
@@ -69,7 +69,7 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 	fileUploadDao := dao.Use(l.svcCtx.Gorm).FileUpload
 	fileUpload := &model.FileUpload{
 		FileCategory:     req.FileCategory,
-		FileName:         fileName,
+		FileName:         fileName + ext,
 		OriginalFileName: originalFileName,
 		Storage:          req.Storage,
 		Path:             path,

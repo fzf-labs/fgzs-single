@@ -35,6 +35,7 @@ func newFileUpload(db *gorm.DB, opts ...gen.DOOption) fileUpload {
 	_fileUpload.Path = field.NewString(tableName, "path")
 	_fileUpload.Ext = field.NewString(tableName, "ext")
 	_fileUpload.Size = field.NewInt64(tableName, "size")
+	_fileUpload.Sha1 = field.NewString(tableName, "sha1")
 	_fileUpload.Status = field.NewInt32(tableName, "status")
 	_fileUpload.CreatedAt = field.NewTime(tableName, "created_at")
 	_fileUpload.UpdatedAt = field.NewTime(tableName, "updated_at")
@@ -57,6 +58,7 @@ type fileUpload struct {
 	Path             field.String // 文件路径
 	Ext              field.String // 文件类型
 	Size             field.Int64  // 文件大小
+	Sha1             field.String // 文件sha1值
 	Status           field.Int32  // 状态(1 正常 2冻结)
 	CreatedAt        field.Time   // 创建时间
 	UpdatedAt        field.Time   // 更新时间
@@ -85,6 +87,7 @@ func (f *fileUpload) updateTableName(table string) *fileUpload {
 	f.Path = field.NewString(table, "path")
 	f.Ext = field.NewString(table, "ext")
 	f.Size = field.NewInt64(table, "size")
+	f.Sha1 = field.NewString(table, "sha1")
 	f.Status = field.NewInt32(table, "status")
 	f.CreatedAt = field.NewTime(table, "created_at")
 	f.UpdatedAt = field.NewTime(table, "updated_at")
@@ -113,7 +116,7 @@ func (f *fileUpload) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (f *fileUpload) fillFieldMap() {
-	f.fieldMap = make(map[string]field.Expr, 12)
+	f.fieldMap = make(map[string]field.Expr, 13)
 	f.fieldMap["id"] = f.ID
 	f.fieldMap["file_category"] = f.FileCategory
 	f.fieldMap["file_name"] = f.FileName
@@ -122,6 +125,7 @@ func (f *fileUpload) fillFieldMap() {
 	f.fieldMap["path"] = f.Path
 	f.fieldMap["ext"] = f.Ext
 	f.fieldMap["size"] = f.Size
+	f.fieldMap["sha1"] = f.Sha1
 	f.fieldMap["status"] = f.Status
 	f.fieldMap["created_at"] = f.CreatedAt
 	f.fieldMap["updated_at"] = f.UpdatedAt

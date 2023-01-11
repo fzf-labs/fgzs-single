@@ -288,13 +288,23 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/file/upload",
+					Path:    "/upload",
 					Handler: file.FileUploadHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/file/list",
+					Path:    "/list",
 					Handler: file.FileListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/info",
+					Handler: file.FileInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/del",
+					Handler: file.FileDelHandler(serverCtx),
 				},
 			}...,
 		),

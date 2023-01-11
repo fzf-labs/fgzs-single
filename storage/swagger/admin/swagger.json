@@ -15,6 +15,114 @@
     "application/json"
   ],
   "paths": {
+    "/file/del": {
+      "post": {
+        "summary": "文件-文件删除",
+        "operationId": "FileDel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileDelResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FileDelReq"
+            }
+          }
+        ],
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/file/info": {
+      "post": {
+        "summary": "文件-文件信息",
+        "operationId": "FileInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FileInfoReq"
+            }
+          }
+        ],
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/file/list": {
+      "post": {
+        "summary": "文件-文件列表",
+        "operationId": "FileList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FileListReq"
+            }
+          }
+        ],
+        "tags": [
+          "file"
+        ]
+      }
+    },
+    "/file/upload": {
+      "post": {
+        "summary": "文件-文件上传",
+        "operationId": "FileUpload",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileUploadResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FileUploadReq"
+            }
+          }
+        ],
+        "tags": [
+          "file"
+        ]
+      }
+    },
     "/ping": {
       "get": {
         "summary": "ping",
@@ -862,60 +970,6 @@
           "dashboard"
         ]
       }
-    },
-    "file/file/list": {
-      "post": {
-        "summary": "文件-文件列表",
-        "operationId": "FileList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/FileListResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/FileListReq"
-            }
-          }
-        ],
-        "tags": [
-          "file"
-        ]
-      }
-    },
-    "file/file/upload": {
-      "post": {
-        "summary": "文件-文件上传",
-        "operationId": "FileUpload",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/FileUploadResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/FileUploadReq"
-            }
-          }
-        ],
-        "tags": [
-          "file"
-        ]
-      }
     }
   },
   "definitions": {
@@ -994,6 +1048,27 @@
         "usedPercent"
       ]
     },
+    "FileDelReq": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "文件ids"
+        }
+      },
+      "title": "FileDelReq",
+      "required": [
+        "ids"
+      ]
+    },
+    "FileDelResp": {
+      "type": "object",
+      "title": "FileDelResp"
+    },
     "FileInfo": {
       "type": "object",
       "properties": {
@@ -1057,6 +1132,33 @@
         "status",
         "createdAt",
         "updatedAt"
+      ]
+    },
+    "FileInfoReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "id"
+        }
+      },
+      "title": "FileInfoReq",
+      "required": [
+        "id",
+        "number"
+      ]
+    },
+    "FileInfoResp": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/FileInfo"
+        }
+      },
+      "title": "FileInfoResp",
+      "required": [
+        "info"
       ]
     },
     "FileListReq": {
