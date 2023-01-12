@@ -68,8 +68,8 @@ swagger:
 .PHONY: gormgen
 # make gormgen 生成gorm模型文件和Sql DDL
 gormgen:
-	@go run ./cmd/gormgen/main.go
-	@go run ./cmd/sqldump/main.go
+	@go run ./cmd/gormgen/main.go -f cmd/gormgen/config.yaml
+	@go run ./cmd/sqldump/main.go -f cmd/sqldump/config.yaml
 
 .PHONY: errcode
 # make errcode 生成错误码

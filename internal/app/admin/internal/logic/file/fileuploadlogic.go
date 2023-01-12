@@ -46,7 +46,7 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 	path := BuildPath(req.FileCategory, fileName, ext)
 	switch req.Storage {
 	case "local":
-		dstFile, err := fileutil.QuickOpenFile(filepath.Join(l.svcCtx.Config.LocalPath, path))
+		dstFile, err := fileutil.QuickOpenFile(filepath.Join(l.svcCtx.Config.Upload.Path, path))
 		if err != nil {
 			return nil, err
 		}

@@ -183,7 +183,7 @@ CREATE TABLE `sys_log` (
   `resp` json DEFAULT NULL COMMENT '响应数据',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=850 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
+) ENGINE=InnoDB AUTO_INCREMENT=852 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
 CREATE TABLE `sys_perm_menu` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '上级菜单',

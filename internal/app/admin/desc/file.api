@@ -56,12 +56,32 @@ type (
 )
 
 type (
-    FileDelReq{
+    FileDelReq {
         Ids []int64 `json:"ids"`//文件ids
     }
-    FileDelResp{
+    FileDelResp {
     }
 )
+
+
+type (
+    FileStaticReq {
+    }
+    FileStaticResp {
+    }
+)
+@server(
+    group : file
+    prefix : /file
+)
+service admin {
+    @doc(
+        summary: "静态文件"
+    )
+    @handler FileStatic //静态文件
+    get /static/:p1/:p2/:p3 (FileStaticReq) returns (FileStaticResp)
+}
+
 
 
 @server(

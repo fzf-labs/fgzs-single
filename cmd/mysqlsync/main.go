@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"github.com/spf13/viper"
 	"log"
 	"os/exec"
+	"path/filepath"
 )
 
 type MysqlDsn struct {
@@ -22,11 +24,11 @@ type Config struct {
 
 var conf Config
 
-func init() {
+func loadConfig(configFile string) {
 	config := viper.New()
-	config.AddConfigPath("./")     //设置读取的文件路径
-	config.SetConfigName("config") //设置读取的文件名
-	config.SetConfigType("yaml")   //设置文件的类型
+	config.AddConfigPath(filepath.Dir(configFile)) //设置读取的文件路径
+	config.SetConfigName("config")                 //设置读取的文件名
+	config.SetConfigType("yaml")                   //设置文件的类型
 	//尝试进行配置读取
 	if err := config.ReadInConfig(); err != nil {
 		panic(err)
@@ -37,7 +39,12 @@ func init() {
 	}
 }
 
+var configFile = flag.String("f", "config.yaml", "the config file")
+
 func main() {
+	flag.Parse()
+	loadConfig(*configFile)
+
 	if conf.Source == nil {
 		fmt.Println("Source err")
 		return

@@ -18,5 +18,10 @@ type Config struct {
 
 	AliOss oss.AliConfig
 
-	LocalPath string
+	Upload Upload
+}
+
+type Upload struct {
+	Path string
+	Host string
 }

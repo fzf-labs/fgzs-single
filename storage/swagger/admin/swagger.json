@@ -96,6 +96,43 @@
         ]
       }
     },
+    "/file/static/{p1}/{p2}/{p3}": {
+      "get": {
+        "summary": "静态文件",
+        "operationId": "FileStatic",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/FileStaticResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "p1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "p2",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "p3",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "file"
+        ]
+      }
+    },
     "/file/upload": {
       "post": {
         "summary": "文件-文件上传",
@@ -1216,6 +1253,14 @@
         "list",
         "paginator"
       ]
+    },
+    "FileStaticReq": {
+      "type": "object",
+      "title": "FileStaticReq"
+    },
+    "FileStaticResp": {
+      "type": "object",
+      "title": "FileStaticResp"
     },
     "FileUploadReq": {
       "type": "object",

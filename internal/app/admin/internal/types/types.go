@@ -540,3 +540,9 @@ type FileDelReq struct {
 
 type FileDelResp struct {
 }
+
+type FileStaticReq struct {
+}
+
+type FileStaticResp struct {
+}

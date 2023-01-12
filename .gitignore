@@ -29,9 +29,12 @@ cover.out
 # 代码编辑器隐藏文件
 .idea
 
+#编译后文件
+bin/
+
 #本地配置文件忽略
 internal/app/admin/etc/admin.yaml
 internal/app/web/etc/web.yaml
-
-#编译后文件
-bin/
+cmd/gormgen/config.yaml
+cmd/mysqlsync/config.yaml
+cmd/sqldump/config.yaml

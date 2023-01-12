@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fgzs-single/pkg/conv"
+	"flag"
 	"fmt"
 	"github.com/spf13/viper"
 	"golang.org/x/text/cases"
@@ -9,7 +9,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gorm"
-	"path"
+	"path/filepath"
 	"strings"
 	"unicode"
 )
@@ -20,9 +20,34 @@ var dataMap = map[string]func(detailType string) (dataType string){
 	"json":    func(string) string { return "datatypes.JSON" },
 }
 
+type Config struct {
+	DSN string
+}
+
+var conf Config
+
+func loadConfig(configFile string) {
+	config := viper.New()
+	config.AddConfigPath(filepath.Dir(configFile)) //设置读取的文件路径
+	config.SetConfigName("config")                 //设置读取的文件名
+	config.SetConfigType("yaml")                   //设置文件的类型
+	//尝试进行配置读取
+	if err := config.ReadInConfig(); err != nil {
+		panic(err)
+	}
+	err := config.Unmarshal(&conf)
+	if err != nil {
+		panic(err)
+	}
+}
+
+var configFile = flag.String("f", "config.yaml", "the config file")
+
 func main() {
-	dsn := GetDsn("internal/app/admin/etc/admin.yaml")
-	db := ConnectDB(dsn)
+	flag.Parse()
+	loadConfig(*configFile)
+
+	db := ConnectDB(conf.DSN)
 	g := gen.NewGenerator(gen.Config{
 		OutPath:      "./internal/dal/dao",
 		ModelPkgPath: "./internal/dal/model",
@@ -47,22 +72,6 @@ func ConnectDB(dsn string) *gorm.DB {
 		panic(fmt.Errorf("connect db fail: %s", err))
 	}
 	return db
-}
-
-func GetDsn(fileName string) string {
-	fileDir := path.Dir(fileName)
-	filePathBase := path.Base(fileName)
-	fileExt := path.Ext(fileName)
-	filePrefix := filePathBase[0 : len(filePathBase)-len(fileExt)]
-	config := viper.New()
-	config.AddConfigPath(fileDir)    //设置读取的文件路径
-	config.SetConfigName(filePrefix) //设置读取的文件名
-	config.SetConfigType("yaml")     //设置文件的类型
-	//尝试进行配置读取
-	if err := config.ReadInConfig(); err != nil {
-		panic(err)
-	}
-	return conv.String(config.Get("Gorm.DataSourceName"))
 }
 
 // UpperCamelCase 下划线单词转为大写驼峰单词
