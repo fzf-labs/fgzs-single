@@ -10,6 +10,7 @@ import (
 	"sysmanage.api"
 	"syslog.api"
 	"file.api"
+	"sensitiveword.api"
 )
 info(
 	title: "admin"

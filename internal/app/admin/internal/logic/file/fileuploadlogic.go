@@ -6,6 +6,7 @@ import (
 	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
+	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/pkg/oss"
 	"fgzs-single/pkg/util/fileutil"
@@ -45,7 +46,7 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 	ext := fileutil.Ext(originalFileName)
 	path := BuildPath(req.FileCategory, fileName, ext)
 	switch req.Storage {
-	case "local":
+	case constant.FileStorageLocal:
 		dstFile, err := fileutil.QuickOpenFile(filepath.Join(l.svcCtx.Config.Upload.Path, path))
 		if err != nil {
 			return nil, err
@@ -55,13 +56,13 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 		if err != nil {
 			return nil, err
 		}
-	case "ali_oss":
+	case constant.FileStorageAliOss:
 		aliOss := oss.NewAliOss(l.svcCtx.Config.AliOss)
 		err := aliOss.PutObj(path, file)
 		if err != nil {
 			return nil, errorx.FileOSSUploadException.WithDetail(err)
 		}
-	case "txy_oss":
+	case constant.FileStorageTxyOss:
 	default:
 		return nil, errorx.WrongFileStorageLocation
 

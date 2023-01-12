@@ -3,11 +3,13 @@ package file
 import (
 	"context"
 	"fgzs-single/internal/dal/dao"
+	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/pkg/conv"
 	"fgzs-single/pkg/page"
 	"fgzs-single/pkg/util/timeutil"
 	"github.com/jinzhu/copier"
+	"path/filepath"
 	"strings"
 
 	"fgzs-single/internal/app/admin/internal/svc"
@@ -81,6 +83,17 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 	}
 
 	for _, v := range result {
+		var url string
+		switch v.Storage {
+		case constant.FileStorageLocal:
+			url = filepath.Join(l.svcCtx.Config.Upload.Host, v.Path)
+		case constant.FileStorageAliOss:
+			url = filepath.Join(l.svcCtx.Config.AliOss.Host, v.Path)
+		case constant.FileStorageTxyOss:
+
+		default:
+
+		}
 		resp.List = append(resp.List, types.FileInfo{
 			Id:               v.ID,
 			FileCategory:     v.FileCategory,
@@ -88,6 +101,7 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 			OriginalFileName: v.OriginalFileName,
 			Storage:          v.Storage,
 			Path:             v.Path,
+			Url:              url,
 			Ext:              v.Ext,
 			Size:             v.Size,
 			Status:           v.Status,

@@ -1,0 +1,90 @@
+syntax = "v1"
+
+info(
+    title: "sensitiveword"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    SensitiveWordInfo {
+        Id int64 `json:"id"`
+        CategoryID int64 `json:"categoryId"`                                                   //分类ID
+        CategoryName string `json:"categoryName"`                                               //分类名称
+        Word string `json:"word"`                                                              //敏感词
+        CreatedAt string `json:"createdAt"`                                                    //创建时间
+        UpdatedAt string `json:"updatedAt"`                                                    //更新时间
+    }
+    SensitiveWordListReq {
+        Page int `json:"page"`                            //页码
+        PageSize int `json:"pageSize"`                    //页大小
+        QuickSearch string `json:"quick_search,optional"` //快捷搜索
+        Order string `json:"order,optional"`              //排序
+        Search []SearchParam `json:"search,optional"`     //搜索参数
+    }
+    SensitiveWordListResp {
+        List []SensitiveWordInfo `json:"list"`          //敏感词列表
+        Paginator Paginator `json:"paginator"`          //分页
+    }
+)
+
+type (
+    SensitiveWordInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //id
+    }
+    SensitiveWordInfoResp {
+        Info SensitiveWordInfo `json:"info"`
+    }
+)
+
+
+type (
+    SensitiveWordStoreReq {
+        Id int64 `json:"id"`
+        CategoryID int64 `json:"categoryId"`                           // 分类ID
+        Word string `json:"word"`                                      // 敏感词
+    }
+    SensitiveWordStoreResp {
+    }
+)
+
+type (
+    SensitiveWordDelReq {
+        Ids []int64 `json:"ids"`//敏感词ids
+    }
+    SensitiveWordDelResp {
+    }
+)
+
+@server(
+    group : sensitiveword
+    prefix : /sensitiveword
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "敏感词列表"
+    )
+    @handler SensitiveWordList
+    post /list (SensitiveWordListReq) returns (SensitiveWordListResp)
+
+    @doc(
+        summary: "单个敏感词"
+    )
+    @handler SensitiveWordInfo
+    post /info (SensitiveWordInfoReq) returns (SensitiveWordInfoResp)
+
+    @doc(
+        summary: "保存敏感词"
+    )
+    @handler SensitiveWordStore
+    post /store (SensitiveWordStoreReq) returns (SensitiveWordStoreResp)
+
+    @doc(
+        summary: "删除敏感词"
+    )
+    @handler SensitiveWordDel
+    post /del (SensitiveWordDelReq) returns (SensitiveWordDelReq)
+}

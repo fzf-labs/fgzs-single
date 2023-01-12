@@ -49,3 +49,10 @@ const (
 	SmsTypeAccountCheck = "account_check" //账号检查
 	SmsTypeAccountBind  = "account_bind"  //账号绑定
 )
+
+// 文件上传
+const (
+	FileStorageLocal  = "local"
+	FileStorageAliOss = "ali_oss"
+	FileStorageTxyOss = "txy_oss"
+)

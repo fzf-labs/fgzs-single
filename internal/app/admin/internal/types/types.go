@@ -506,6 +506,7 @@ type FileInfo struct {
 	OriginalFileName string `json:"originalFileName"` // 文件原名称
 	Storage          string `json:"storage"`          // 存储方式
 	Path             string `json:"path"`             // 文件路径
+	Url              string `json:"url"`              // 文件url
 	Ext              string `json:"ext"`              // 文件类型
 	Size             int64  `json:"size"`             // 文件大小
 	Status           int32  `json:"status"`           // 状态(1 正常 2冻结)
@@ -545,4 +546,50 @@ type FileStaticReq struct {
 }
 
 type FileStaticResp struct {
+}
+
+type SensitiveWordInfo struct {
+	Id           int64  `json:"id"`
+	CategoryID   int64  `json:"categoryId"`   //分类ID
+	CategoryName string `json:"categoryName"` //分类名称
+	Word         string `json:"word"`         //敏感词
+	CreatedAt    string `json:"createdAt"`    //创建时间
+	UpdatedAt    string `json:"updatedAt"`    //更新时间
+}
+
+type SensitiveWordListReq struct {
+	Page        int           `json:"page"`                  //页码
+	PageSize    int           `json:"pageSize"`              //页大小
+	QuickSearch string        `json:"quick_search,optional"` //快捷搜索
+	Order       string        `json:"order,optional"`        //排序
+	Search      []SearchParam `json:"search,optional"`       //搜索参数
+}
+
+type SensitiveWordListResp struct {
+	List      []SensitiveWordInfo `json:"list"`      //敏感词列表
+	Paginator Paginator           `json:"paginator"` //分页
+}
+
+type SensitiveWordInfoReq struct {
+	Id int64 `json:"id" validate:"number,gte=1"` //id
+}
+
+type SensitiveWordInfoResp struct {
+	Info SensitiveWordInfo `json:"info"`
+}
+
+type SensitiveWordStoreReq struct {
+	Id         int64  `json:"id"`
+	CategoryID int64  `json:"categoryId"` // 分类ID
+	Word       string `json:"word"`       // 敏感词
+}
+
+type SensitiveWordStoreResp struct {
+}
+
+type SensitiveWordDelReq struct {
+	Ids []int64 `json:"ids"` //敏感词ids
+}
+
+type SensitiveWordDelResp struct {
 }

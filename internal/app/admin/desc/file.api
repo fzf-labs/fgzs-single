@@ -26,6 +26,7 @@ type (
         OriginalFileName string `json:"originalFileName"`              // 文件原名称
         Storage string `json:"storage"`                                // 存储方式
         Path string `json:"path"`                                      // 文件路径
+        Url string `json:"url"`                                        // 文件url
         Ext string `json:"ext"`                                        // 文件类型
         Size int64 `json:"size"`                                       // 文件大小
         Status int32 `json:"status"`                                   // 状态(1 正常 2冻结)

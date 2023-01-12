@@ -6,6 +6,7 @@ import (
 
 	dashboard "fgzs-single/internal/app/admin/internal/handler/dashboard"
 	file "fgzs-single/internal/app/admin/internal/handler/file"
+	sensitiveword "fgzs-single/internal/app/admin/internal/handler/sensitiveword"
 	sysadmin "fgzs-single/internal/app/admin/internal/handler/sys/admin"
 	sysdept "fgzs-single/internal/app/admin/internal/handler/sys/dept"
 	sysjob "fgzs-single/internal/app/admin/internal/handler/sys/job"
@@ -320,5 +321,34 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			}...,
 		),
 		rest.WithPrefix("/file"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware, serverCtx.AuthMiddleware, serverCtx.SysLogMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/list",
+					Handler: sensitiveword.SensitiveWordListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/info",
+					Handler: sensitiveword.SensitiveWordInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/store",
+					Handler: sensitiveword.SensitiveWordStoreHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/del",
+					Handler: sensitiveword.SensitiveWordDelHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/sensitiveword"),
 	)
 }
