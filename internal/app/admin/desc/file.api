@@ -29,6 +29,7 @@ type (
         Url string `json:"url"`                                        // 文件url
         Ext string `json:"ext"`                                        // 文件类型
         Size int64 `json:"size"`                                       // 文件大小
+        Sha1 string `json:"sha1"`                                      // sha1
         Status int32 `json:"status"`                                   // 状态(1 正常 2冻结)
         CreatedAt string `json:"createdAt"`                            // 创建时间
         UpdatedAt string `json:"updatedAt"`                            // 更新时间

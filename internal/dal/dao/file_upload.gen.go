@@ -31,6 +31,7 @@ func newFileUpload(db *gorm.DB, opts ...gen.DOOption) fileUpload {
 	_fileUpload.FileCategory = field.NewString(tableName, "file_category")
 	_fileUpload.FileName = field.NewString(tableName, "file_name")
 	_fileUpload.OriginalFileName = field.NewString(tableName, "original_file_name")
+	_fileUpload.Mimetype = field.NewString(tableName, "mimetype")
 	_fileUpload.Storage = field.NewString(tableName, "storage")
 	_fileUpload.Path = field.NewString(tableName, "path")
 	_fileUpload.Ext = field.NewString(tableName, "ext")
@@ -54,6 +55,7 @@ type fileUpload struct {
 	FileCategory     field.String // 文件分类
 	FileName         field.String // 文件新名称
 	OriginalFileName field.String // 文件原名称
+	Mimetype         field.String // mimetype
 	Storage          field.String // 存储方式
 	Path             field.String // 文件路径
 	Ext              field.String // 文件类型
@@ -83,6 +85,7 @@ func (f *fileUpload) updateTableName(table string) *fileUpload {
 	f.FileCategory = field.NewString(table, "file_category")
 	f.FileName = field.NewString(table, "file_name")
 	f.OriginalFileName = field.NewString(table, "original_file_name")
+	f.Mimetype = field.NewString(table, "mimetype")
 	f.Storage = field.NewString(table, "storage")
 	f.Path = field.NewString(table, "path")
 	f.Ext = field.NewString(table, "ext")
@@ -116,11 +119,12 @@ func (f *fileUpload) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (f *fileUpload) fillFieldMap() {
-	f.fieldMap = make(map[string]field.Expr, 13)
+	f.fieldMap = make(map[string]field.Expr, 14)
 	f.fieldMap["id"] = f.ID
 	f.fieldMap["file_category"] = f.FileCategory
 	f.fieldMap["file_name"] = f.FileName
 	f.fieldMap["original_file_name"] = f.OriginalFileName
+	f.fieldMap["mimetype"] = f.Mimetype
 	f.fieldMap["storage"] = f.Storage
 	f.fieldMap["path"] = f.Path
 	f.fieldMap["ext"] = f.Ext

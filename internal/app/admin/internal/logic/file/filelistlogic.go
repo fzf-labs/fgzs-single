@@ -43,8 +43,14 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 			if search.Field == "id" {
 				query = query.Where(fileUploadDao.ID.Eq(conv.Int64(search.Val)))
 			}
+			if search.Field == "originalFileName" {
+				query = query.Where(fileUploadDao.OriginalFileName.Eq(search.Val))
+			}
 			if search.Field == "filename" {
 				query = query.Where(fileUploadDao.FileName.Eq(search.Val))
+			}
+			if search.Field == "storage" {
+				query = query.Where(fileUploadDao.Storage.Eq(search.Val))
 			}
 			if search.Field == "status" {
 				query = query.Where(fileUploadDao.Status.Eq(conv.Int32(search.Val)))
@@ -104,6 +110,7 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 			Url:              url,
 			Ext:              v.Ext,
 			Size:             v.Size,
+			Sha1:             v.Sha1,
 			Status:           v.Status,
 			CreatedAt:        timeutil.ToDateTimeStringByTime(v.CreatedAt),
 			UpdatedAt:        timeutil.ToDateTimeStringByTime(v.UpdatedAt),

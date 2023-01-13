@@ -18,6 +18,7 @@ type FileUpload struct {
 	FileCategory     string         `gorm:"column:file_category" json:"fileCategory"`                     // 文件分类
 	FileName         string         `gorm:"column:file_name" json:"fileName"`                             // 文件新名称
 	OriginalFileName string         `gorm:"column:original_file_name" json:"originalFileName"`            // 文件原名称
+	Mimetype         string         `gorm:"column:mimetype" json:"mimetype"`                              // mimetype
 	Storage          string         `gorm:"column:storage" json:"storage"`                                // 存储方式
 	Path             string         `gorm:"column:path" json:"path"`                                      // 文件路径
 	Ext              string         `gorm:"column:ext" json:"ext"`                                        // 文件类型

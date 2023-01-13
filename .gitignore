@@ -38,3 +38,6 @@ internal/app/web/etc/web.yaml
 cmd/gormgen/config.yaml
 cmd/mysqlsync/config.yaml
 cmd/sqldump/config.yaml
+
+#存储
+storage/upload

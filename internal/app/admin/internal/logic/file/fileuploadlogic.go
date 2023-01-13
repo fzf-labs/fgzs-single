@@ -11,6 +11,7 @@ import (
 	"fgzs-single/pkg/oss"
 	"fgzs-single/pkg/util/fileutil"
 	"fgzs-single/pkg/util/uuidutil"
+	"gorm.io/gorm"
 	"io"
 	"mime/multipart"
 	"path/filepath"
@@ -36,15 +37,30 @@ func NewFileUploadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FileUp
 
 func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multipart.FileHeader) (resp *types.FileUploadResp, err error) {
 	resp = new(types.FileUploadResp)
+	fileUploadDao := dao.Use(l.svcCtx.Gorm).FileUpload
 	file, err := fileHeader.Open()
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
+	sha1, err := fileutil.Sha1(file)
+	if err != nil {
+		return nil, err
+	}
+	fileUpload, err := fileUploadDao.WithContext(l.ctx).Where(fileUploadDao.Sha1.Eq(sha1)).First()
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, errorx.DataSqlErr.WithDetail(err)
+	}
+	if fileUpload != nil {
+		resp.ID = fileUpload.ID
+		return
+	}
 	originalFileName := strings.ToLower(fileHeader.Filename)
 	fileName := uuidutil.KSUidByTime()
 	ext := fileutil.Ext(originalFileName)
 	path := BuildPath(req.FileCategory, fileName, ext)
+	file.Seek(0, io.SeekStart)
+	mime, _ := fileutil.ReaderMimeTypeAndExt(file)
 	switch req.Storage {
 	case constant.FileStorageLocal:
 		dstFile, err := fileutil.QuickOpenFile(filepath.Join(l.svcCtx.Config.Upload.Path, path))
@@ -52,6 +68,7 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 			return nil, err
 		}
 		defer dstFile.Close()
+		file.Seek(0, io.SeekStart)
 		_, err = io.Copy(dstFile, file)
 		if err != nil {
 			return nil, err
@@ -67,19 +84,20 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 		return nil, errorx.WrongFileStorageLocation
 
 	}
-	fileUploadDao := dao.Use(l.svcCtx.Gorm).FileUpload
-	fileUpload := &model.FileUpload{
+	fileUpload = &model.FileUpload{
 		FileCategory:     req.FileCategory,
 		FileName:         fileName + ext,
 		OriginalFileName: originalFileName,
+		Mimetype:         mime,
 		Storage:          req.Storage,
 		Path:             path,
 		Ext:              ext,
 		Size:             fileHeader.Size,
+		Sha1:             sha1,
 	}
 	err = fileUploadDao.WithContext(l.ctx).Create(fileUpload)
 	if err != nil {
-		return nil, err
+		return nil, errorx.DataSqlErr.WithDetail(err)
 	}
 	resp.ID = fileUpload.ID
 	return
