@@ -1,4 +1,4 @@
-package sensitiveword
+package word
 
 import (
 	"context"

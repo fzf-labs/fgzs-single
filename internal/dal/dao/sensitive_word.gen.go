@@ -29,7 +29,7 @@ func newSensitiveWord(db *gorm.DB, opts ...gen.DOOption) sensitiveWord {
 	_sensitiveWord.ALL = field.NewAsterisk(tableName)
 	_sensitiveWord.ID = field.NewInt64(tableName, "id")
 	_sensitiveWord.CategoryID = field.NewInt64(tableName, "category_id")
-	_sensitiveWord.Word = field.NewString(tableName, "word")
+	_sensitiveWord.Text = field.NewString(tableName, "text")
 	_sensitiveWord.CreatedAt = field.NewTime(tableName, "created_at")
 	_sensitiveWord.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_sensitiveWord.DeletedAt = field.NewField(tableName, "deleted_at")
@@ -45,7 +45,7 @@ type sensitiveWord struct {
 	ALL        field.Asterisk
 	ID         field.Int64
 	CategoryID field.Int64  // 分类ID
-	Word       field.String // 敏感词
+	Text       field.String // 敏感词
 	CreatedAt  field.Time   // 创建时间
 	UpdatedAt  field.Time   // 更新时间
 	DeletedAt  field.Field  // 删除时间
@@ -67,7 +67,7 @@ func (s *sensitiveWord) updateTableName(table string) *sensitiveWord {
 	s.ALL = field.NewAsterisk(table)
 	s.ID = field.NewInt64(table, "id")
 	s.CategoryID = field.NewInt64(table, "category_id")
-	s.Word = field.NewString(table, "word")
+	s.Text = field.NewString(table, "text")
 	s.CreatedAt = field.NewTime(table, "created_at")
 	s.UpdatedAt = field.NewTime(table, "updated_at")
 	s.DeletedAt = field.NewField(table, "deleted_at")
@@ -98,7 +98,7 @@ func (s *sensitiveWord) fillFieldMap() {
 	s.fieldMap = make(map[string]field.Expr, 6)
 	s.fieldMap["id"] = s.ID
 	s.fieldMap["category_id"] = s.CategoryID
-	s.fieldMap["word"] = s.Word
+	s.fieldMap["text"] = s.Text
 	s.fieldMap["created_at"] = s.CreatedAt
 	s.fieldMap["updated_at"] = s.UpdatedAt
 	s.fieldMap["deleted_at"] = s.DeletedAt

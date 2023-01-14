@@ -17,77 +17,77 @@ import (
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                    db,
-		Asset:                 newAsset(db, opts...),
-		AssetBusiness:         newAssetBusiness(db, opts...),
-		AssetLog:              newAssetLog(db, opts...),
-		FileUpload:            newFileUpload(db, opts...),
-		PaymentRecord:         newPaymentRecord(db, opts...),
-		SensitiveWord:         newSensitiveWord(db, opts...),
-		SensitiveWordCategory: newSensitiveWordCategory(db, opts...),
-		SysAPI:                newSysAPI(db, opts...),
-		SysAdmin:              newSysAdmin(db, opts...),
-		SysDept:               newSysDept(db, opts...),
-		SysDictionary:         newSysDictionary(db, opts...),
-		SysJob:                newSysJob(db, opts...),
-		SysLog:                newSysLog(db, opts...),
-		SysPermMenu:           newSysPermMenu(db, opts...),
-		SysRole:               newSysRole(db, opts...),
-		User:                  newUser(db, opts...),
-		UserAuth:              newUserAuth(db, opts...),
-		UserCancellation:      newUserCancellation(db, opts...),
-		UserFeedback:          newUserFeedback(db, opts...),
+		db:                db,
+		Asset:             newAsset(db, opts...),
+		AssetBusiness:     newAssetBusiness(db, opts...),
+		AssetLog:          newAssetLog(db, opts...),
+		FileUpload:        newFileUpload(db, opts...),
+		PaymentRecord:     newPaymentRecord(db, opts...),
+		SensitiveCategory: newSensitiveCategory(db, opts...),
+		SensitiveWord:     newSensitiveWord(db, opts...),
+		SysAPI:            newSysAPI(db, opts...),
+		SysAdmin:          newSysAdmin(db, opts...),
+		SysDept:           newSysDept(db, opts...),
+		SysDictionary:     newSysDictionary(db, opts...),
+		SysJob:            newSysJob(db, opts...),
+		SysLog:            newSysLog(db, opts...),
+		SysPermMenu:       newSysPermMenu(db, opts...),
+		SysRole:           newSysRole(db, opts...),
+		User:              newUser(db, opts...),
+		UserAuth:          newUserAuth(db, opts...),
+		UserCancellation:  newUserCancellation(db, opts...),
+		UserFeedback:      newUserFeedback(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Asset                 asset
-	AssetBusiness         assetBusiness
-	AssetLog              assetLog
-	FileUpload            fileUpload
-	PaymentRecord         paymentRecord
-	SensitiveWord         sensitiveWord
-	SensitiveWordCategory sensitiveWordCategory
-	SysAPI                sysAPI
-	SysAdmin              sysAdmin
-	SysDept               sysDept
-	SysDictionary         sysDictionary
-	SysJob                sysJob
-	SysLog                sysLog
-	SysPermMenu           sysPermMenu
-	SysRole               sysRole
-	User                  user
-	UserAuth              userAuth
-	UserCancellation      userCancellation
-	UserFeedback          userFeedback
+	Asset             asset
+	AssetBusiness     assetBusiness
+	AssetLog          assetLog
+	FileUpload        fileUpload
+	PaymentRecord     paymentRecord
+	SensitiveCategory sensitiveCategory
+	SensitiveWord     sensitiveWord
+	SysAPI            sysAPI
+	SysAdmin          sysAdmin
+	SysDept           sysDept
+	SysDictionary     sysDictionary
+	SysJob            sysJob
+	SysLog            sysLog
+	SysPermMenu       sysPermMenu
+	SysRole           sysRole
+	User              user
+	UserAuth          userAuth
+	UserCancellation  userCancellation
+	UserFeedback      userFeedback
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                    db,
-		Asset:                 q.Asset.clone(db),
-		AssetBusiness:         q.AssetBusiness.clone(db),
-		AssetLog:              q.AssetLog.clone(db),
-		FileUpload:            q.FileUpload.clone(db),
-		PaymentRecord:         q.PaymentRecord.clone(db),
-		SensitiveWord:         q.SensitiveWord.clone(db),
-		SensitiveWordCategory: q.SensitiveWordCategory.clone(db),
-		SysAPI:                q.SysAPI.clone(db),
-		SysAdmin:              q.SysAdmin.clone(db),
-		SysDept:               q.SysDept.clone(db),
-		SysDictionary:         q.SysDictionary.clone(db),
-		SysJob:                q.SysJob.clone(db),
-		SysLog:                q.SysLog.clone(db),
-		SysPermMenu:           q.SysPermMenu.clone(db),
-		SysRole:               q.SysRole.clone(db),
-		User:                  q.User.clone(db),
-		UserAuth:              q.UserAuth.clone(db),
-		UserCancellation:      q.UserCancellation.clone(db),
-		UserFeedback:          q.UserFeedback.clone(db),
+		db:                db,
+		Asset:             q.Asset.clone(db),
+		AssetBusiness:     q.AssetBusiness.clone(db),
+		AssetLog:          q.AssetLog.clone(db),
+		FileUpload:        q.FileUpload.clone(db),
+		PaymentRecord:     q.PaymentRecord.clone(db),
+		SensitiveCategory: q.SensitiveCategory.clone(db),
+		SensitiveWord:     q.SensitiveWord.clone(db),
+		SysAPI:            q.SysAPI.clone(db),
+		SysAdmin:          q.SysAdmin.clone(db),
+		SysDept:           q.SysDept.clone(db),
+		SysDictionary:     q.SysDictionary.clone(db),
+		SysJob:            q.SysJob.clone(db),
+		SysLog:            q.SysLog.clone(db),
+		SysPermMenu:       q.SysPermMenu.clone(db),
+		SysRole:           q.SysRole.clone(db),
+		User:              q.User.clone(db),
+		UserAuth:          q.UserAuth.clone(db),
+		UserCancellation:  q.UserCancellation.clone(db),
+		UserFeedback:      q.UserFeedback.clone(db),
 	}
 }
 
@@ -101,72 +101,72 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                    db,
-		Asset:                 q.Asset.replaceDB(db),
-		AssetBusiness:         q.AssetBusiness.replaceDB(db),
-		AssetLog:              q.AssetLog.replaceDB(db),
-		FileUpload:            q.FileUpload.replaceDB(db),
-		PaymentRecord:         q.PaymentRecord.replaceDB(db),
-		SensitiveWord:         q.SensitiveWord.replaceDB(db),
-		SensitiveWordCategory: q.SensitiveWordCategory.replaceDB(db),
-		SysAPI:                q.SysAPI.replaceDB(db),
-		SysAdmin:              q.SysAdmin.replaceDB(db),
-		SysDept:               q.SysDept.replaceDB(db),
-		SysDictionary:         q.SysDictionary.replaceDB(db),
-		SysJob:                q.SysJob.replaceDB(db),
-		SysLog:                q.SysLog.replaceDB(db),
-		SysPermMenu:           q.SysPermMenu.replaceDB(db),
-		SysRole:               q.SysRole.replaceDB(db),
-		User:                  q.User.replaceDB(db),
-		UserAuth:              q.UserAuth.replaceDB(db),
-		UserCancellation:      q.UserCancellation.replaceDB(db),
-		UserFeedback:          q.UserFeedback.replaceDB(db),
+		db:                db,
+		Asset:             q.Asset.replaceDB(db),
+		AssetBusiness:     q.AssetBusiness.replaceDB(db),
+		AssetLog:          q.AssetLog.replaceDB(db),
+		FileUpload:        q.FileUpload.replaceDB(db),
+		PaymentRecord:     q.PaymentRecord.replaceDB(db),
+		SensitiveCategory: q.SensitiveCategory.replaceDB(db),
+		SensitiveWord:     q.SensitiveWord.replaceDB(db),
+		SysAPI:            q.SysAPI.replaceDB(db),
+		SysAdmin:          q.SysAdmin.replaceDB(db),
+		SysDept:           q.SysDept.replaceDB(db),
+		SysDictionary:     q.SysDictionary.replaceDB(db),
+		SysJob:            q.SysJob.replaceDB(db),
+		SysLog:            q.SysLog.replaceDB(db),
+		SysPermMenu:       q.SysPermMenu.replaceDB(db),
+		SysRole:           q.SysRole.replaceDB(db),
+		User:              q.User.replaceDB(db),
+		UserAuth:          q.UserAuth.replaceDB(db),
+		UserCancellation:  q.UserCancellation.replaceDB(db),
+		UserFeedback:      q.UserFeedback.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Asset                 *assetDo
-	AssetBusiness         *assetBusinessDo
-	AssetLog              *assetLogDo
-	FileUpload            *fileUploadDo
-	PaymentRecord         *paymentRecordDo
-	SensitiveWord         *sensitiveWordDo
-	SensitiveWordCategory *sensitiveWordCategoryDo
-	SysAPI                *sysAPIDo
-	SysAdmin              *sysAdminDo
-	SysDept               *sysDeptDo
-	SysDictionary         *sysDictionaryDo
-	SysJob                *sysJobDo
-	SysLog                *sysLogDo
-	SysPermMenu           *sysPermMenuDo
-	SysRole               *sysRoleDo
-	User                  *userDo
-	UserAuth              *userAuthDo
-	UserCancellation      *userCancellationDo
-	UserFeedback          *userFeedbackDo
+	Asset             *assetDo
+	AssetBusiness     *assetBusinessDo
+	AssetLog          *assetLogDo
+	FileUpload        *fileUploadDo
+	PaymentRecord     *paymentRecordDo
+	SensitiveCategory *sensitiveCategoryDo
+	SensitiveWord     *sensitiveWordDo
+	SysAPI            *sysAPIDo
+	SysAdmin          *sysAdminDo
+	SysDept           *sysDeptDo
+	SysDictionary     *sysDictionaryDo
+	SysJob            *sysJobDo
+	SysLog            *sysLogDo
+	SysPermMenu       *sysPermMenuDo
+	SysRole           *sysRoleDo
+	User              *userDo
+	UserAuth          *userAuthDo
+	UserCancellation  *userCancellationDo
+	UserFeedback      *userFeedbackDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Asset:                 q.Asset.WithContext(ctx),
-		AssetBusiness:         q.AssetBusiness.WithContext(ctx),
-		AssetLog:              q.AssetLog.WithContext(ctx),
-		FileUpload:            q.FileUpload.WithContext(ctx),
-		PaymentRecord:         q.PaymentRecord.WithContext(ctx),
-		SensitiveWord:         q.SensitiveWord.WithContext(ctx),
-		SensitiveWordCategory: q.SensitiveWordCategory.WithContext(ctx),
-		SysAPI:                q.SysAPI.WithContext(ctx),
-		SysAdmin:              q.SysAdmin.WithContext(ctx),
-		SysDept:               q.SysDept.WithContext(ctx),
-		SysDictionary:         q.SysDictionary.WithContext(ctx),
-		SysJob:                q.SysJob.WithContext(ctx),
-		SysLog:                q.SysLog.WithContext(ctx),
-		SysPermMenu:           q.SysPermMenu.WithContext(ctx),
-		SysRole:               q.SysRole.WithContext(ctx),
-		User:                  q.User.WithContext(ctx),
-		UserAuth:              q.UserAuth.WithContext(ctx),
-		UserCancellation:      q.UserCancellation.WithContext(ctx),
-		UserFeedback:          q.UserFeedback.WithContext(ctx),
+		Asset:             q.Asset.WithContext(ctx),
+		AssetBusiness:     q.AssetBusiness.WithContext(ctx),
+		AssetLog:          q.AssetLog.WithContext(ctx),
+		FileUpload:        q.FileUpload.WithContext(ctx),
+		PaymentRecord:     q.PaymentRecord.WithContext(ctx),
+		SensitiveCategory: q.SensitiveCategory.WithContext(ctx),
+		SensitiveWord:     q.SensitiveWord.WithContext(ctx),
+		SysAPI:            q.SysAPI.WithContext(ctx),
+		SysAdmin:          q.SysAdmin.WithContext(ctx),
+		SysDept:           q.SysDept.WithContext(ctx),
+		SysDictionary:     q.SysDictionary.WithContext(ctx),
+		SysJob:            q.SysJob.WithContext(ctx),
+		SysLog:            q.SysLog.WithContext(ctx),
+		SysPermMenu:       q.SysPermMenu.WithContext(ctx),
+		SysRole:           q.SysRole.WithContext(ctx),
+		User:              q.User.WithContext(ctx),
+		UserAuth:          q.UserAuth.WithContext(ctx),
+		UserCancellation:  q.UserCancellation.WithContext(ctx),
+		UserFeedback:      q.UserFeedback.WithContext(ctx),
 	}
 }
 

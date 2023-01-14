@@ -553,7 +553,7 @@ type SensitiveWordInfo struct {
 	Id           int64  `json:"id"`
 	CategoryID   int64  `json:"categoryId"`   //分类ID
 	CategoryName string `json:"categoryName"` //分类名称
-	Word         string `json:"word"`         //敏感词
+	Text         string `json:"text"`         //敏感词
 	CreatedAt    string `json:"createdAt"`    //创建时间
 	UpdatedAt    string `json:"updatedAt"`    //更新时间
 }
@@ -581,8 +581,8 @@ type SensitiveWordInfoResp struct {
 
 type SensitiveWordStoreReq struct {
 	Id         int64  `json:"id"`
-	CategoryID int64  `json:"categoryId"` // 分类ID
-	Word       string `json:"word"`       // 敏感词
+	CategoryID int64  `json:"categoryId"` //分类ID
+	Text       string `json:"text"`       //敏感词
 }
 
 type SensitiveWordStoreResp struct {
@@ -593,4 +593,49 @@ type SensitiveWordDelReq struct {
 }
 
 type SensitiveWordDelResp struct {
+}
+
+type SensitiveCategoryInfo struct {
+	Id        int64  `json:"id"`
+	Label     string `json:"label"`     //标签
+	Name      string `json:"name"`      //分类
+	CreatedAt string `json:"createdAt"` //创建时间
+	UpdatedAt string `json:"updatedAt"` //更新时间
+}
+
+type SensitiveCategoryListReq struct {
+	Page        int           `json:"page"`                  //页码
+	PageSize    int           `json:"pageSize"`              //页大小
+	QuickSearch string        `json:"quick_search,optional"` //快捷搜索
+	Order       string        `json:"order,optional"`        //排序
+	Search      []SearchParam `json:"search,optional"`       //搜索参数
+}
+
+type SensitiveCategoryListResp struct {
+	List      []SensitiveCategoryInfo `json:"list"`      //敏感词列表
+	Paginator Paginator               `json:"paginator"` //分页
+}
+
+type SensitiveCategoryInfoReq struct {
+	Id int64 `json:"id" validate:"number,gte=1"` //id
+}
+
+type SensitiveCategoryInfoResp struct {
+	Info SensitiveCategoryInfo `json:"info"`
+}
+
+type SensitiveCategoryStoreReq struct {
+	Id    int64  `json:"id"`    //ID
+	Label string `json:"label"` //标签
+	Name  string `json:"name"`  //分类
+}
+
+type SensitiveCategoryStoreResp struct {
+}
+
+type SensitiveCategoryDelReq struct {
+	Ids []int64 `json:"ids"` //敏感词ids
+}
+
+type SensitiveCategoryDelResp struct {
 }

@@ -1,4 +1,4 @@
-package sensitiveword
+package word
 
 import (
 	"context"
@@ -36,14 +36,14 @@ func (l *SensitiveWordListLogic) SensitiveWordList(req *types.SensitiveWordListR
 	sensitiveWordDao := dao.Use(l.svcCtx.Gorm).SensitiveWord
 	query := sensitiveWordDao.WithContext(l.ctx)
 	if req.QuickSearch != "" {
-		query = query.Where(sensitiveWordDao.Word.Like(req.QuickSearch))
+		query = query.Where(sensitiveWordDao.Text.Like(req.QuickSearch))
 	} else {
 		for _, search := range req.Search {
 			if search.Field == "id" {
 				query = query.Where(sensitiveWordDao.ID.Eq(conv.Int64(search.Val)))
 			}
 			if search.Field == "word" {
-				query = query.Where(sensitiveWordDao.Word.Eq(search.Val))
+				query = query.Where(sensitiveWordDao.Text.Eq(search.Val))
 			}
 			if search.Field == "categoryID" {
 				query = query.Where(sensitiveWordDao.CategoryID.Eq(conv.Int64(search.Val)))
@@ -90,9 +90,9 @@ func (l *SensitiveWordListLogic) SensitiveWordList(req *types.SensitiveWordListR
 	}
 	var ids []int64
 	for _, v := range res {
-		ids = append(ids, v.ID)
+		ids = append(ids, v.CategoryID)
 	}
-	idToName, err := repo.NewSensitiveWordRepo(l.ctx, l.svcCtx.Gorm).IdToName(ids)
+	idToName, err := repo.NewSensitiveCategoryRepo(l.ctx, l.svcCtx.Gorm).IdToName(ids)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (l *SensitiveWordListLogic) SensitiveWordList(req *types.SensitiveWordListR
 			Id:           v.ID,
 			CategoryID:   v.CategoryID,
 			CategoryName: idToName[v.CategoryID],
-			Word:         v.Word,
+			Text:         v.Text,
 			CreatedAt:    timeutil.ToDateTimeStringByTime(v.CreatedAt),
 			UpdatedAt:    timeutil.ToDateTimeStringByTime(v.UpdatedAt),
 		})

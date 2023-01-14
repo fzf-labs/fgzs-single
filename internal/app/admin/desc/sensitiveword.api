@@ -11,11 +11,11 @@ info(
 type (
     SensitiveWordInfo {
         Id int64 `json:"id"`
-        CategoryID int64 `json:"categoryId"`                                                   //分类ID
+        CategoryID int64 `json:"categoryId"`                                                    //分类ID
         CategoryName string `json:"categoryName"`                                               //分类名称
-        Word string `json:"word"`                                                              //敏感词
-        CreatedAt string `json:"createdAt"`                                                    //创建时间
-        UpdatedAt string `json:"updatedAt"`                                                    //更新时间
+        Text string `json:"text"`                                                               //敏感词
+        CreatedAt string `json:"createdAt"`                                                     //创建时间
+        UpdatedAt string `json:"updatedAt"`                                                     //更新时间
     }
     SensitiveWordListReq {
         Page int `json:"page"`                            //页码
@@ -43,8 +43,8 @@ type (
 type (
     SensitiveWordStoreReq {
         Id int64 `json:"id"`
-        CategoryID int64 `json:"categoryId"`                           // 分类ID
-        Word string `json:"word"`                                      // 敏感词
+        CategoryID int64 `json:"categoryId"`                           //分类ID
+        Text string `json:"text"`                                      //敏感词
     }
     SensitiveWordStoreResp {
     }
@@ -59,8 +59,8 @@ type (
 )
 
 @server(
-    group : sensitiveword
-    prefix : /sensitiveword
+    group : sensitive/word
+    prefix : /sensitive/word
     middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
 )
 service admin {
@@ -87,4 +87,86 @@ service admin {
     )
     @handler SensitiveWordDel
     post /del (SensitiveWordDelReq) returns (SensitiveWordDelReq)
+}
+
+
+
+type (
+    SensitiveCategoryInfo {
+        Id int64 `json:"id"`
+        Label string `json:"label"`                                                                    //标签
+        Name string `json:"name"`                                                                      //分类
+        CreatedAt string `json:"createdAt"`                                                            //创建时间
+        UpdatedAt string `json:"updatedAt"`                                                            //更新时间
+    }
+    SensitiveCategoryListReq {
+        Page int `json:"page"`                            //页码
+        PageSize int `json:"pageSize"`                    //页大小
+        QuickSearch string `json:"quick_search,optional"` //快捷搜索
+        Order string `json:"order,optional"`              //排序
+        Search []SearchParam `json:"search,optional"`     //搜索参数
+    }
+    SensitiveCategoryListResp {
+        List []SensitiveCategoryInfo `json:"list"`          //敏感词列表
+        Paginator Paginator `json:"paginator"`              //分页
+    }
+)
+
+type (
+    SensitiveCategoryInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //id
+    }
+    SensitiveCategoryInfoResp {
+        Info SensitiveCategoryInfo `json:"info"`
+    }
+)
+
+
+type (
+    SensitiveCategoryStoreReq {
+        Id int64 `json:"id"`                                            //ID
+        Label string `json:"label"`                                     //标签
+        Name string `json:"name"`                                       //分类
+    }
+    SensitiveCategoryStoreResp {
+    }
+)
+
+type (
+    SensitiveCategoryDelReq {
+        Ids []int64 `json:"ids"`//敏感词ids
+    }
+    SensitiveCategoryDelResp {
+    }
+)
+
+@server(
+    group : sensitive/category
+    prefix : /sensitive/category
+    middleware: JwtMiddleware,AuthMiddleware,SysLogMiddleware
+)
+service admin {
+    @doc(
+        summary: "敏感词分类列表"
+    )
+    @handler SensitiveCategoryList
+    post /list (SensitiveCategoryListReq) returns (SensitiveCategoryListResp)
+
+    @doc(
+        summary: "单个敏感词分类"
+    )
+    @handler SensitiveCategoryInfo
+    post /info (SensitiveCategoryInfoReq) returns (SensitiveCategoryInfoResp)
+
+    @doc(
+        summary: "保存敏感词分类"
+    )
+    @handler SensitiveCategoryStore
+    post /store (SensitiveCategoryStoreReq) returns (SensitiveCategoryStoreResp)
+
+    @doc(
+        summary: "删除敏感词分类"
+    )
+    @handler SensitiveCategoryDel
+    post /del (SensitiveCategoryDelReq) returns (SensitiveCategoryDelReq)
 }

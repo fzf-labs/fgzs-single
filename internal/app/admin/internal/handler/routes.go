@@ -6,7 +6,8 @@ import (
 
 	dashboard "fgzs-single/internal/app/admin/internal/handler/dashboard"
 	file "fgzs-single/internal/app/admin/internal/handler/file"
-	sensitiveword "fgzs-single/internal/app/admin/internal/handler/sensitiveword"
+	sensitivecategory "fgzs-single/internal/app/admin/internal/handler/sensitive/category"
+	sensitiveword "fgzs-single/internal/app/admin/internal/handler/sensitive/word"
 	sysadmin "fgzs-single/internal/app/admin/internal/handler/sys/admin"
 	sysdept "fgzs-single/internal/app/admin/internal/handler/sys/dept"
 	sysjob "fgzs-single/internal/app/admin/internal/handler/sys/job"
@@ -349,6 +350,35 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
-		rest.WithPrefix("/sensitiveword"),
+		rest.WithPrefix("/sensitive/word"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware, serverCtx.AuthMiddleware, serverCtx.SysLogMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/list",
+					Handler: sensitivecategory.SensitiveCategoryListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/info",
+					Handler: sensitivecategory.SensitiveCategoryInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/store",
+					Handler: sensitivecategory.SensitiveCategoryStoreHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/del",
+					Handler: sensitivecategory.SensitiveCategoryDelHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/sensitive/category"),
 	)
 }

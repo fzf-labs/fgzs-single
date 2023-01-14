@@ -9,7 +9,7 @@ import (
 	"fgzs-single/pkg/page"
 	"fgzs-single/pkg/util/timeutil"
 	"github.com/jinzhu/copier"
-	"path/filepath"
+	url2 "net/url"
 	"strings"
 
 	"fgzs-single/internal/app/admin/internal/svc"
@@ -92,9 +92,15 @@ func (l *FileListLogic) FileList(req *types.FileListReq) (resp *types.FileListRe
 		var url string
 		switch v.Storage {
 		case constant.FileStorageLocal:
-			url = filepath.Join(l.svcCtx.Config.Upload.Host, v.Path)
+			url, err = url2.JoinPath(l.svcCtx.Config.Upload.Host, v.Path)
+			if err != nil {
+				return nil, err
+			}
 		case constant.FileStorageAliOss:
-			url = filepath.Join(l.svcCtx.Config.AliOss.Host, v.Path)
+			url, err = url2.JoinPath(l.svcCtx.Config.AliOss.Host, v.Path)
+			if err != nil {
+				return nil, err
+			}
 		case constant.FileStorageTxyOss:
 
 		default:

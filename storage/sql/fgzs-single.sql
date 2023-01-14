@@ -71,7 +71,7 @@ CREATE TABLE `file_upload` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件-上传';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件-上传';
 CREATE TABLE `payment_record` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
@@ -94,25 +94,26 @@ CREATE TABLE `payment_record` (
   UNIQUE KEY `key_idx` (`key`) USING BTREE,
   KEY `out_trade_no_idx` (`out_trade_no`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付记录表';
-CREATE TABLE `sensitive_word` (
+CREATE TABLE `sensitive_category` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `category_id` bigint DEFAULT NULL COMMENT '分类ID',
-  `word` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '敏感词',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`),
-  KEY `word_idx` (`word`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='敏感词';
-CREATE TABLE `sensitive_word_category` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '关键词',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `word_idx` (`name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='敏感词分类';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='敏感词分类';
+CREATE TABLE `sensitive_word` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `category_id` bigint DEFAULT NULL COMMENT '分类ID',
+  `text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '敏感词',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  KEY `word_idx` (`text`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='敏感词';
 CREATE TABLE `sys_admin` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户名',
@@ -203,7 +204,7 @@ CREATE TABLE `sys_log` (
   `resp` json DEFAULT NULL COMMENT '响应数据',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1050 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
+) ENGINE=InnoDB AUTO_INCREMENT=1295 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统-日志';
 CREATE TABLE `sys_perm_menu` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '上级菜单',
@@ -225,7 +226,7 @@ CREATE TABLE `sys_perm_menu` (
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `sort` (`sort`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单和权限规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单和权限规则表';
 CREATE TABLE `sys_role` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `pid` bigint unsigned NOT NULL DEFAULT '0' COMMENT '父级id',

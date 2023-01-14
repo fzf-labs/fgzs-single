@@ -1,12 +1,13 @@
-package sensitiveword
+package word
 
 import (
 	"context"
-	"fgzs-single/internal/app/admin/internal/svc"
-	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
 	"fgzs-single/internal/errorx"
+
+	"fgzs-single/internal/app/admin/internal/svc"
+	"fgzs-single/internal/app/admin/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,10 +30,10 @@ func (l *SensitiveWordStoreLogic) SensitiveWordStore(req *types.SensitiveWordSto
 	resp = new(types.SensitiveWordStoreResp)
 	sensitiveWordDao := dao.Use(l.svcCtx.Gorm).SensitiveWord
 	if req.Id > 0 {
-		_, err = sensitiveWordDao.WithContext(l.ctx).Select(sensitiveWordDao.ID, sensitiveWordDao.CategoryID, sensitiveWordDao.Word).Where(sensitiveWordDao.ID.Eq(req.Id)).Updates(model.SensitiveWord{
+		_, err = sensitiveWordDao.WithContext(l.ctx).Select(sensitiveWordDao.ID, sensitiveWordDao.CategoryID, sensitiveWordDao.Text).Where(sensitiveWordDao.ID.Eq(req.Id)).Updates(model.SensitiveWord{
 			ID:         req.Id,
 			CategoryID: req.CategoryID,
-			Word:       req.Word,
+			Text:       req.Text,
 		})
 		if err != nil {
 			return nil, errorx.DataSqlErr.WithDetail(err)
@@ -41,7 +42,7 @@ func (l *SensitiveWordStoreLogic) SensitiveWordStore(req *types.SensitiveWordSto
 		err := sensitiveWordDao.WithContext(l.ctx).Create(&model.SensitiveWord{
 			ID:         req.Id,
 			CategoryID: req.CategoryID,
-			Word:       req.Word,
+			Text:       req.Text,
 		})
 		if err != nil {
 			return nil, errorx.DataSqlErr.WithDetail(err)

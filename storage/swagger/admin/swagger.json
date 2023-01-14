@@ -177,7 +177,115 @@
         ]
       }
     },
-    "/sensitiveword/del": {
+    "/sensitive/category/del": {
+      "post": {
+        "summary": "删除敏感词分类",
+        "operationId": "SensitiveCategoryDel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryDelReq"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryDelReq"
+            }
+          }
+        ],
+        "tags": [
+          "sensitive/category"
+        ]
+      }
+    },
+    "/sensitive/category/info": {
+      "post": {
+        "summary": "单个敏感词分类",
+        "operationId": "SensitiveCategoryInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryInfoReq"
+            }
+          }
+        ],
+        "tags": [
+          "sensitive/category"
+        ]
+      }
+    },
+    "/sensitive/category/list": {
+      "post": {
+        "summary": "敏感词分类列表",
+        "operationId": "SensitiveCategoryList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryListReq"
+            }
+          }
+        ],
+        "tags": [
+          "sensitive/category"
+        ]
+      }
+    },
+    "/sensitive/category/store": {
+      "post": {
+        "summary": "保存敏感词分类",
+        "operationId": "SensitiveCategoryStore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryStoreResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SensitiveCategoryStoreReq"
+            }
+          }
+        ],
+        "tags": [
+          "sensitive/category"
+        ]
+      }
+    },
+    "/sensitive/word/del": {
       "post": {
         "summary": "删除敏感词",
         "operationId": "SensitiveWordDel",
@@ -200,11 +308,11 @@
           }
         ],
         "tags": [
-          "sensitiveword"
+          "sensitive/word"
         ]
       }
     },
-    "/sensitiveword/info": {
+    "/sensitive/word/info": {
       "post": {
         "summary": "单个敏感词",
         "operationId": "SensitiveWordInfo",
@@ -227,11 +335,11 @@
           }
         ],
         "tags": [
-          "sensitiveword"
+          "sensitive/word"
         ]
       }
     },
-    "/sensitiveword/list": {
+    "/sensitive/word/list": {
       "post": {
         "summary": "敏感词列表",
         "operationId": "SensitiveWordList",
@@ -254,11 +362,11 @@
           }
         ],
         "tags": [
-          "sensitiveword"
+          "sensitive/word"
         ]
       }
     },
-    "/sensitiveword/store": {
+    "/sensitive/word/store": {
       "post": {
         "summary": "保存敏感词",
         "operationId": "SensitiveWordStore",
@@ -281,7 +389,7 @@
           }
         ],
         "tags": [
-          "sensitiveword"
+          "sensitive/word"
         ]
       }
     },
@@ -1548,6 +1656,171 @@
         "operator"
       ]
     },
+    "SensitiveCategoryDelReq": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": "敏感词ids"
+        }
+      },
+      "title": "SensitiveCategoryDelReq",
+      "required": [
+        "ids"
+      ]
+    },
+    "SensitiveCategoryDelResp": {
+      "type": "object",
+      "title": "SensitiveCategoryDelResp"
+    },
+    "SensitiveCategoryInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "label": {
+          "type": "string",
+          "description": "标签"
+        },
+        "name": {
+          "type": "string",
+          "description": "分类"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "更新时间"
+        }
+      },
+      "title": "SensitiveCategoryInfo",
+      "required": [
+        "id",
+        "label",
+        "name",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SensitiveCategoryInfoReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "id"
+        }
+      },
+      "title": "SensitiveCategoryInfoReq",
+      "required": [
+        "id",
+        "number"
+      ]
+    },
+    "SensitiveCategoryInfoResp": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/SensitiveCategoryInfo"
+        }
+      },
+      "title": "SensitiveCategoryInfoResp",
+      "required": [
+        "info"
+      ]
+    },
+    "SensitiveCategoryListReq": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "页码"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "页大小"
+        },
+        "quick_search": {
+          "type": "string",
+          "description": "快捷搜索"
+        },
+        "order": {
+          "type": "string",
+          "description": "排序"
+        },
+        "search": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchParam"
+          },
+          "description": "搜索参数"
+        }
+      },
+      "title": "SensitiveCategoryListReq",
+      "required": [
+        "page",
+        "pageSize"
+      ]
+    },
+    "SensitiveCategoryListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SensitiveCategoryInfo"
+          },
+          "description": "敏感词列表"
+        },
+        "paginator": {
+          "$ref": "#/definitions/Paginator",
+          "description": "分页"
+        }
+      },
+      "title": "SensitiveCategoryListResp",
+      "required": [
+        "list",
+        "paginator"
+      ]
+    },
+    "SensitiveCategoryStoreReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID"
+        },
+        "label": {
+          "type": "string",
+          "description": "标签"
+        },
+        "name": {
+          "type": "string",
+          "description": "分类"
+        }
+      },
+      "title": "SensitiveCategoryStoreReq",
+      "required": [
+        "id",
+        "label",
+        "name"
+      ]
+    },
+    "SensitiveCategoryStoreResp": {
+      "type": "object",
+      "title": "SensitiveCategoryStoreResp"
+    },
     "SensitiveWordDelReq": {
       "type": "object",
       "properties": {
@@ -1585,7 +1858,7 @@
           "type": "string",
           "description": "分类名称"
         },
-        "word": {
+        "text": {
           "type": "string",
           "description": "敏感词"
         },
@@ -1603,7 +1876,7 @@
         "id",
         "categoryId",
         "categoryName",
-        "word",
+        "text",
         "createdAt",
         "updatedAt"
       ]
@@ -1701,18 +1974,18 @@
         "categoryId": {
           "type": "integer",
           "format": "int64",
-          "description": " 分类ID"
+          "description": "分类ID"
         },
-        "word": {
+        "text": {
           "type": "string",
-          "description": " 敏感词"
+          "description": "敏感词"
         }
       },
       "title": "SensitiveWordStoreReq",
       "required": [
         "id",
         "categoryId",
-        "word"
+        "text"
       ]
     },
     "SensitiveWordStoreResp": {

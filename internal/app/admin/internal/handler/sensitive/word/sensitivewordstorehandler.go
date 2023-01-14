@@ -1,7 +1,7 @@
-package sensitiveword
+package word
 
 import (
-	"fgzs-single/internal/app/admin/internal/logic/sensitiveword"
+	"fgzs-single/internal/app/admin/internal/logic/sensitive/word"
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/define/constant"
@@ -12,9 +12,9 @@ import (
 	"net/http"
 )
 
-func SensitiveWordDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func SensitiveWordStoreHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.SensitiveWordDelReq
+		var req types.SensitiveWordStoreReq
 		if err := httpx.Parse(r, &req); err != nil {
 			response.Err(r, w, errorx.ParamErr.WithDetail(err))
 			return
@@ -24,8 +24,8 @@ func SensitiveWordDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			response.Err(r, w, errorx.ParamErr.WithDetail(err))
 			return
 		}
-		l := sensitiveword.NewSensitiveWordDelLogic(r.Context(), svcCtx)
-		resp, err := l.SensitiveWordDel(&req)
+		l := word.NewSensitiveWordStoreLogic(r.Context(), svcCtx)
+		resp, err := l.SensitiveWordStore(&req)
 		response.Http(r, w, resp, err)
 	}
 }

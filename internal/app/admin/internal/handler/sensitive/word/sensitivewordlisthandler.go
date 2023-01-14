@@ -1,7 +1,7 @@
-package sensitiveword
+package word
 
 import (
-	"fgzs-single/internal/app/admin/internal/logic/sensitiveword"
+	"fgzs-single/internal/app/admin/internal/logic/sensitive/word"
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/define/constant"
@@ -24,7 +24,7 @@ func SensitiveWordListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			response.Err(r, w, errorx.ParamErr.WithDetail(err))
 			return
 		}
-		l := sensitiveword.NewSensitiveWordListLogic(r.Context(), svcCtx)
+		l := word.NewSensitiveWordListLogic(r.Context(), svcCtx)
 		resp, err := l.SensitiveWordList(&req)
 		response.Http(r, w, resp, err)
 	}

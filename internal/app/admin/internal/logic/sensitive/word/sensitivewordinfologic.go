@@ -1,4 +1,4 @@
-package sensitiveword
+package word
 
 import (
 	"context"
@@ -30,12 +30,12 @@ func NewSensitiveWordInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 func (l *SensitiveWordInfoLogic) SensitiveWordInfo(req *types.SensitiveWordInfoReq) (resp *types.SensitiveWordInfoResp, err error) {
 	resp = new(types.SensitiveWordInfoResp)
 	sensitiveWordDao := dao.Use(l.svcCtx.Gorm).SensitiveWord
-	sensitiveWordCategoryDao := dao.Use(l.svcCtx.Gorm).SensitiveWordCategory
+	sensitiveCategoryDao := dao.Use(l.svcCtx.Gorm).SensitiveCategory
 	sensitiveWord, err := sensitiveWordDao.WithContext(l.ctx).Where(sensitiveWordDao.ID.Eq(req.Id)).First()
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, errorx.DataSqlErr.WithDetail(err)
 	}
-	sensitiveWordCategory, err := sensitiveWordCategoryDao.WithContext(l.ctx).Where(sensitiveWordCategoryDao.ID.Eq(sensitiveWord.CategoryID)).First()
+	sensitiveWordCategory, err := sensitiveCategoryDao.WithContext(l.ctx).Where(sensitiveCategoryDao.ID.Eq(sensitiveWord.CategoryID)).First()
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, errorx.DataSqlErr.WithDetail(err)
 	}
@@ -43,7 +43,7 @@ func (l *SensitiveWordInfoLogic) SensitiveWordInfo(req *types.SensitiveWordInfoR
 		Id:           sensitiveWord.ID,
 		CategoryID:   sensitiveWord.CategoryID,
 		CategoryName: sensitiveWordCategory.Name,
-		Word:         sensitiveWord.Word,
+		Text:         sensitiveWord.Text,
 		CreatedAt:    timeutil.ToDateTimeStringByTime(sensitiveWord.CreatedAt),
 		UpdatedAt:    timeutil.ToDateTimeStringByTime(sensitiveWord.UpdatedAt),
 	}
