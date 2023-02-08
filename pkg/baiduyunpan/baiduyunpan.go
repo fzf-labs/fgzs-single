@@ -41,11 +41,11 @@ func FileMove(accessToken string, fileList []File) error {
 	formParams.Add("filelist", string(fileListJson))
 	var response FileMoveResp
 	client := req.C()
-	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetResult(&response).Post(fileMoveurl)
+	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetSuccessResult(&response).Post(fileMoveurl)
 	if err != nil {
 		return err
 	}
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	if response.Errno != 0 {
@@ -115,11 +115,11 @@ func FileList(accessToken string, path string) (*FileListResp, error) {
 	}
 	var response FileListResp
 	client := req.C()
-	resp, err := client.R().SetQueryParams(queryParams).SetResult(&response).Post(url)
+	resp, err := client.R().SetQueryParams(queryParams).SetSuccessResult(&response).Post(url)
 	if err != nil {
 		return nil, err
 	}
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return nil, fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	return &response, nil
@@ -137,11 +137,11 @@ func FileListMultimedia(accessToken string, path string, start int, limit int) (
 	}
 	var response FileListAllResp
 	client := req.C()
-	resp, err := client.R().SetQueryParams(queryParams).SetResult(&response).Post(url)
+	resp, err := client.R().SetQueryParams(queryParams).SetSuccessResult(&response).Post(url)
 	if err != nil {
 		return nil, err
 	}
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return nil, fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	if response.Errno != 0 {
@@ -199,11 +199,11 @@ func Move(accessToken string, srcPath string, dstPath string) error {
 	formParams.Add("filelist", string(fileListJson))
 	var response FileMoveResp
 	client := req.C()
-	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetResult(&response).Post(fileMoveUrl)
+	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetSuccessResult(&response).Post(fileMoveUrl)
 	if err != nil {
 		return err
 	}
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	if response.Errno != 0 {
@@ -236,11 +236,11 @@ func Dir(accessToken string, path string) error {
 	formParams.Add("uploadid", "")
 	var response FileDirResp
 	client := req.C()
-	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetResult(&response).Post(dirUrl)
+	resp, err := client.R().SetQueryParams(queryParams).SetFormDataFromValues(formParams).SetSuccessResult(&response).Post(dirUrl)
 	if err != nil {
 		return err
 	}
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	if response.Errno != 0 {

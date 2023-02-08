@@ -24,6 +24,6 @@ func NewFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FileInfo
 }
 
 func (l *FileInfoLogic) FileInfo(req *types.FileInfoReq) (resp *types.FileInfoResp, err error) {
-	
+
 	return
 }

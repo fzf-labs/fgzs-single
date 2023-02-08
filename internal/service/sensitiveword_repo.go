@@ -47,7 +47,7 @@ func (s *SensitiveWordService) Words() ([]string, error) {
 	err := cacheKey.AutoCache(s.redis, &words, func() (string, error) {
 		ws := make([]string, 0)
 		sensitiveWordDao := dao.Use(s.db).SensitiveWord
-		err := sensitiveWordDao.WithContext(s.ctx).Pluck(sensitiveWordDao.Word, &ws)
+		err := sensitiveWordDao.WithContext(s.ctx).Pluck(sensitiveWordDao.Text, &ws)
 		if err != nil {
 			return "", errorx.DataSqlErr.WithDetail(err)
 		}

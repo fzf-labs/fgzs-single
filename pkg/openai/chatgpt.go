@@ -56,12 +56,12 @@ func (c *ChatGPT) Completions(msg string) (string, error) {
 	}
 	var response CompletionsResp
 	client := req.C()
-	resp, err := client.R().SetHeader("Authorization", fmt.Sprintf("Bearer %s", c.ApiKey)).SetBody(param).SetResult(&response).Post(url)
+	resp, err := client.R().SetHeader("Authorization", fmt.Sprintf("Bearer %s", c.ApiKey)).SetBody(param).SetSuccessResult(&response).Post(url)
 	if err != nil {
 		return "", err
 	}
 	fmt.Println(resp)
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		return "", fmt.Errorf("bad response status: %s", resp.Status)
 	}
 	if len(response.Choices) > 0 {

@@ -87,10 +87,6 @@ func (l *SensitiveCategoryListLogic) SensitiveCategoryList(req *types.SensitiveC
 	if err != nil {
 		return nil, errorx.DataSqlErr.WithDetail(err)
 	}
-	var ids []int64
-	for _, v := range res {
-		ids = append(ids, v.ID)
-	}
 	for _, v := range res {
 		resp.List = append(resp.List, types.SensitiveCategoryInfo{
 			Id:        v.ID,

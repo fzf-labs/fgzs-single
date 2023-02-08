@@ -59,7 +59,10 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 	fileName := uuidutil.KSUidByTime()
 	ext := fileutil.Ext(originalFileName)
 	path := BuildPath(req.FileCategory, fileName, ext)
-	file.Seek(0, io.SeekStart)
+	_, err = file.Seek(0, io.SeekStart)
+	if err != nil {
+		return nil, err
+	}
 	mime, _ := fileutil.ReaderMimeTypeAndExt(file)
 	switch req.Storage {
 	case constant.FileStorageLocal:
@@ -68,7 +71,10 @@ func (l *FileUploadLogic) FileUpload(req *types.FileUploadReq, fileHeader *multi
 			return nil, err
 		}
 		defer dstFile.Close()
-		file.Seek(0, io.SeekStart)
+		_, err = file.Seek(0, io.SeekStart)
+		if err != nil {
+			return nil, err
+		}
 		_, err = io.Copy(dstFile, file)
 		if err != nil {
 			return nil, err
