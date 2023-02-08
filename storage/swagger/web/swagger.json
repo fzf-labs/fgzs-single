@@ -31,9 +31,135 @@
           "system"
         ]
       }
+    },
+    "tool/iplocation": {
+      "post": {
+        "summary": "IpLocation",
+        "operationId": "IpLocation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/IpLocationResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IpLocationReq"
+            }
+          }
+        ],
+        "tags": [
+          "tool"
+        ]
+      }
+    },
+    "tool/sqltostruct": {
+      "post": {
+        "summary": "SqlToStruct",
+        "operationId": "SqlToStruct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SqlToStructResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SqlToStructReq"
+            }
+          }
+        ],
+        "tags": [
+          "tool"
+        ]
+      }
+    },
+    "tool/uasearch": {
+      "post": {
+        "summary": "UaSearch",
+        "operationId": "UaSearch",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UaSearchResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UaSearchReq"
+            }
+          }
+        ],
+        "tags": [
+          "tool"
+        ]
+      }
+    },
+    "tool/websocket": {
+      "get": {
+        "summary": "Websocket",
+        "operationId": "Websocket",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WebsocketResp"
+            }
+          }
+        },
+        "tags": [
+          "tool"
+        ]
+      }
     }
   },
   "definitions": {
+    "IpLocationReq": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string"
+        }
+      },
+      "title": "IpLocationReq",
+      "required": [
+        "ip"
+      ]
+    },
+    "IpLocationResp": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        }
+      },
+      "title": "IpLocationResp",
+      "required": [
+        "ip",
+        "location"
+      ]
+    },
     "Paginator": {
       "type": "object",
       "properties": {
@@ -85,6 +211,116 @@
     "PingResp": {
       "type": "object",
       "title": "PingResp"
+    },
+    "SqlToStructReq": {
+      "type": "object",
+      "properties": {
+        "sql": {
+          "type": "string"
+        }
+      },
+      "title": "SqlToStructReq",
+      "required": [
+        "sql"
+      ]
+    },
+    "SqlToStructResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        }
+      },
+      "title": "SqlToStructResp",
+      "required": [
+        "code"
+      ]
+    },
+    "UaLocation": {
+      "type": "object",
+      "properties": {
+        "mozilla": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "localization": {
+          "type": "string"
+        },
+        "bot": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "mobile": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "engineVersion": {
+          "type": "string"
+        },
+        "browser": {
+          "type": "string"
+        },
+        "browserVersion": {
+          "type": "string"
+        }
+      },
+      "title": "UaLocation",
+      "required": [
+        "mozilla",
+        "platform",
+        "os",
+        "localization",
+        "bot",
+        "mobile",
+        "engine",
+        "engineVersion",
+        "browser",
+        "browserVersion"
+      ]
+    },
+    "UaSearchReq": {
+      "type": "object",
+      "properties": {
+        "ua": {
+          "type": "string"
+        }
+      },
+      "title": "UaSearchReq",
+      "required": [
+        "ua"
+      ]
+    },
+    "UaSearchResp": {
+      "type": "object",
+      "properties": {
+        "ua": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/definitions/UaLocation"
+        }
+      },
+      "title": "UaSearchResp",
+      "required": [
+        "ua",
+        "location"
+      ]
+    },
+    "WebsocketReq": {
+      "type": "object",
+      "title": "WebsocketReq"
+    },
+    "WebsocketResp": {
+      "type": "object",
+      "title": "WebsocketResp"
     }
   },
   "securityDefinitions": {

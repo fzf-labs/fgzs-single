@@ -15,3 +15,48 @@ type PingReq struct {
 
 type PingResp struct {
 }
+
+type IpLocationReq struct {
+	Ip string `json:"ip"`
+}
+
+type IpLocationResp struct {
+	Ip       string `json:"ip"`
+	Location string `json:"location"`
+}
+
+type UaLocation struct {
+	Mozilla        string `json:"mozilla"`
+	Platform       string `json:"platform"`
+	Os             string `json:"os"`
+	Localization   string `json:"localization"`
+	Bot            bool   `json:"bot"`
+	Mobile         bool   `json:"mobile"`
+	Engine         string `json:"engine"`
+	EngineVersion  string `json:"engineVersion"`
+	Browser        string `json:"browser"`
+	BrowserVersion string `json:"browserVersion"`
+}
+
+type UaSearchReq struct {
+	Ua string `json:"ua"`
+}
+
+type UaSearchResp struct {
+	Ua       string     `json:"ua"`
+	Location UaLocation `json:"location"`
+}
+
+type SqlToStructReq struct {
+	Sql string `json:"sql"`
+}
+
+type SqlToStructResp struct {
+	Code string `json:"code"`
+}
+
+type WebsocketReq struct {
+}
+
+type WebsocketResp struct {
+}

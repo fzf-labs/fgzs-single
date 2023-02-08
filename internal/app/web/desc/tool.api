@@ -1,0 +1,88 @@
+syntax = "v1"
+
+info(
+    title: "tool"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+
+type (
+    IpLocationReq {
+        Ip string `json:"ip"`
+    }
+    IpLocationResp {
+        Ip string `json:"ip"`
+        Location string `json:"location"`
+    }
+)
+
+type (
+    UaLocation {
+        Mozilla string `json:"mozilla"`
+        Platform string `json:"platform"`
+        Os string `json:"os"`
+        Localization string `json:"localization"`
+        Bot bool `json:"bot"`
+        Mobile bool `json:"mobile"`
+        Engine string `json:"engine"`
+        EngineVersion string `json:"engineVersion"`
+        Browser string `json:"browser"`
+        BrowserVersion string `json:"browserVersion"`
+    }
+    UaSearchReq {
+        Ua string `json:"ua"`
+    }
+    UaSearchResp {
+        Ua string `json:"ua"`
+        Location UaLocation `json:"location"`
+    }
+)
+
+type (
+    SqlToStructReq {
+        Sql string `json:"sql"`
+    }
+    SqlToStructResp {
+        Code string `json:"code"`
+    }
+)
+type (
+    WebsocketReq {
+    }
+    WebsocketResp {
+    }
+)
+
+
+@server(
+    group : tool
+    prefix : tool
+)
+service web {
+    @doc(
+        summary: "IpLocation"
+    )
+    @handler IpLocation
+    post /iplocation (IpLocationReq) returns (IpLocationResp)
+
+    @doc(
+        summary: "UaSearch"
+    )
+    @handler UaSearch
+    post /uasearch (UaSearchReq) returns (UaSearchResp)
+
+    @doc(
+        summary: "SqlToStruct"
+    )
+    @handler SqlToStruct
+    post /sqltostruct (SqlToStructReq) returns (SqlToStructResp)
+
+    @doc(
+        summary: "Websocket"
+    )
+    @handler Websocket
+    get /websocket (WebsocketReq) returns (WebsocketResp)
+}

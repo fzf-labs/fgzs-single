@@ -1,0 +1,94 @@
+syntax = "v1"
+
+info(
+    title: "demo"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    DemoInfo {
+        Id int64 `json:"id"`                                                           //示例id
+        Pid int64 `json:"pid"`                                                         //父级示例id
+        Name string `json:"name"`                                                      //示例名称
+        Remark string `json:"remark"`                                                  //备注
+        Status int32 `json:"status"`                                                   //状态
+        Sort int64 `json:"sort"`                                                       //排序
+        CreatedAt string `json:"createdAt"`                                            //创建时间
+        UpdatedAt string `json:"updatedAt"`                                            //更新时间
+        Children []DemoInfo `json:"children"`
+    }
+    DemoListReq {
+        Page int `json:"page"`                            //页码
+        PageSize int `json:"pageSize"`                    //页大小
+        QuickSearch string `json:"quick_search,optional"` //快捷搜索
+        Order string `json:"order,optional"`              //排序
+        Search []SearchParam `json:"search,optional"`     //搜索参数
+    }
+    DemoListResp {
+        List []DemoInfo `json:"list"`          //示例列表
+        Paginator Paginator `json:"paginator"` //分页
+    }
+)
+
+type (
+    DemoInfoReq {
+        Id int64 `json:"id" validate:"number,gte=1"`                         //id
+    }
+    DemoInfoResp {
+        Info DemoInfo `json:"info"`
+    }
+)
+
+
+type (
+    DemoStoreReq {
+        Id int64 `json:"id,optional" validate:"omitempty,number,gte=1"`                                  //示例id
+        Pid int64 `json:"pid" validate:"number,gte=0"`                                                   //父级示例id
+        Name string `json:"name" validate:"min=2,max=50"`                                                //示例名称
+        Remark string `json:"remark,optional" validate:"max=200"`                                        //备注
+        Status int32 `json:"status" validate:"number,gte=0,lte=1"`                                       //状态
+    }
+    DemoStoreResp {
+    }
+)
+
+type (
+    DemoDelReq {
+        Ids []int64 `json:"ids"`//示例ids
+    }
+    DemoDelResp {
+    }
+)
+
+@server(
+    group : demo
+    prefix : demo
+)
+service web {
+    @doc(
+        summary: "示例列表"
+    )
+    @handler DemoList
+    post /list (DemoListReq) returns (DemoListResp)
+
+    @doc(
+        summary: "单个示例"
+    )
+    @handler DemoInfo
+    post /info (DemoInfoReq) returns (DemoInfoResp)
+
+    @doc(
+        summary: "保存示例"
+    )
+    @handler DemoStore
+    post /store (DemoStoreReq) returns (DemoStoreResp)
+
+    @doc(
+        summary: "删除示例"
+    )
+    @handler DemoDel
+    post /del (DemoDelReq) returns (DemoDelReq)
+}

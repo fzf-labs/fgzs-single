@@ -9,7 +9,12 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Gorm  db.MysqlConfig
-	Cache cache.CacheConf
-	Redis core.RedisConfig
+	Gorm   db.MysqlConfig
+	Cache  cache.CacheConf
+	Redis  core.RedisConfig
+	OpenAI OpenAIConfig
+}
+
+type OpenAIConfig struct {
+	ChatGPT string
 }

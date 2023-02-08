@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	system "fgzs-single/internal/app/web/internal/handler/system"
+	tool "fgzs-single/internal/app/web/internal/handler/tool"
 	"fgzs-single/internal/app/web/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -19,5 +20,31 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: system.PingHandler(serverCtx),
 			},
 		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/iplocation",
+				Handler: tool.IpLocationHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/uasearch",
+				Handler: tool.UaSearchHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/sqltostruct",
+				Handler: tool.SqlToStructHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/websocket",
+				Handler: tool.WebsocketHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/tool"),
 	)
 }

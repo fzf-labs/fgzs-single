@@ -1,0 +1,41 @@
+syntax = "v1"
+
+info(
+    title: "chatgpt"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    ChatGPTWeChatReq {
+    }
+    ChatGPTWeChatResp {
+    }
+)
+
+type (
+    ChatGPTTelegramReq {
+    }
+    ChatGPTTelegramResp {
+    }
+)
+
+@server(
+    group : chatgpt
+    prefix : chatgpt
+)
+service web {
+    @doc(
+        summary: "微信"
+    )
+    @handler ChatGPTWeChat
+    post /wechat (ChatGPTWeChatReq) returns (ChatGPTWeChatResp)
+
+    @doc(
+        summary: "telegram"
+    )
+    @handler ChatGPTTelegram
+    post /telegram (ChatGPTTelegramReq) returns (ChatGPTTelegramResp)
+}
