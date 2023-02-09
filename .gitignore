@@ -34,7 +34,13 @@ bin/
 
 #本地配置文件忽略
 internal/app/admin/etc/admin.yaml
+internal/app/admin/etc/admin.dev.yaml
+internal/app/admin/etc/admin.test.yaml
+internal/app/admin/etc/admin.pro.yaml
 internal/app/web/etc/web.yaml
+internal/app/web/etc/web.dev.yaml
+internal/app/web/etc/web.test.yaml
+internal/app/web/etc/web.pro.yaml
 cmd/gormgen/config.yaml
 cmd/mysqlsync/config.yaml
 cmd/sqldump/config.yaml
