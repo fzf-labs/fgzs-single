@@ -26,15 +26,16 @@ func NewIpLocationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IpLoca
 
 func (l *IpLocationLogic) IpLocation(req *types.IpLocationReq) (resp *types.IpLocationResp, err error) {
 	resp = new(types.IpLocationResp)
+	resp.Ip = req.Ip
 	ipLocation, err := iplocation.NewIpLocation("/etc/ip2region.xdb")
 	if err != nil {
-		return nil, err
+		return resp, nil
 	}
 	location, err := ipLocation.SearchLocation(req.Ip)
 	if err != nil {
 		return nil, err
 	}
-	resp.Ip = req.Ip
+
 	resp.Location = location
 	return
 }

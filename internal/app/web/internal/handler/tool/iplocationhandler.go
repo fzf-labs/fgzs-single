@@ -7,6 +7,7 @@ import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/response"
+	"fgzs-single/pkg/util/iputil"
 	"fgzs-single/pkg/validatorx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
@@ -25,6 +26,9 @@ func IpLocationHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		l := tool.NewIpLocationLogic(r.Context(), svcCtx)
+		if req.Ip == "" {
+			req.Ip = iputil.GetRealIP(r)
+		}
 		resp, err := l.IpLocation(&req)
 		response.Http(r, w, resp, err)
 	}
