@@ -41,6 +41,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/stat",
 					Handler: system.StatHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/redis",
+					Handler: system.RedisHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithPrefix("/system"),

@@ -22,43 +22,61 @@ type PingReq struct {
 type PingResp struct {
 }
 
-type Runtime struct {
-	GoVersion   string `json:"goVersion"`   //golang 版本
-	NpmVersion  string `json:"npmVersion"`  //npm 版本
-	NodeVersion string `json:"nodeVersion"` //node 版本
-	Os          string `json:"os"`          //系统
-	Arch        string `json:"arch"`        //架构
+type Sys struct {
+	ComputerName     string `json:"computerName"`     //服务器名称
+	LocalIp          string `json:"localIp"`          //内网ip
+	PublicIp         string `json:"publicIp"`         //外网ip
+	Os               string `json:"os"`               //系统类型
+	Arch             string `json:"arch"`             //系统架构
+	GoVersion        string `json:"goVersion"`        //golang 版本
+	NpmVersion       string `json:"npmVersion"`       //npm 版本
+	NodeVersion      string `json:"nodeVersion"`      //node 版本
+	ProjectPath      string `json:"projectPath"`      //项目地址
+	ProjectStartTime string `json:"projectStartTime"` //项目启动时间
+	ProjectRunTime   string `json:"projectRunTime"`   //项目运行时间
 }
 
 type Cpu struct {
-	VendorID  string    `json:"vendorId"`  //CPU制造商ID
-	ModelName string    `json:"modelName"` //cpu具体型号
-	Cores     string    `json:"cores"`     //核心数
-	CoresLoad []float64 `json:"coresLoad"` //核心占用
+	VendorID string `json:"vendorId"` //CPU制造商ID
+	CpuModel string `json:"cpuModel"` //cpu具体型号
+	CoreNum  string `json:"coreNum"`  //核心数
+	Percent  string `json:"percent"`  //百分比
 }
 
 type Disk struct {
+	DirName     string `json:"dirName"`     //盘符路径
+	SysTypeName string `json:"sysTypeName"` //文件系统
+	TypeName    string `json:"typeName"`    //盘符类型
 	Total       string `json:"total"`       //总占用
-	Available   string `json:"available"`   //可用的
 	Used        string `json:"used"`        //已使用
-	UsedPercent string `json:"usedPercent"` //使用占比
+	Free        string `json:"free"`        //可用的
+	Usage       string `json:"usage"`       //使用占比
 }
 
 type Memory struct {
-	Total       string `json:"total"`       //总占用
-	Available   string `json:"available"`   //可用的
-	Used        string `json:"used"`        //已使用
-	UsedPercent string `json:"usedPercent"` //使用占比
+	Total string `json:"total"` //总占用
+	Used  string `json:"used"`  //已使用
+	Free  string `json:"free"`  //可用的
+	Usage string `json:"usage"` //使用占比
 }
 
 type StatReq struct {
 }
 
 type StatResp struct {
-	Cpu     Cpu     `json:"cpu"`     //cpu
-	Disk    Disk    `json:"disk"`    //磁盘
-	Memory  Memory  `json:"memory"`  //内存
-	Runtime Runtime `json:"runtime"` //运行
+	Cpu    Cpu    `json:"cpu"`    //cpu
+	Disk   []Disk `json:"disk"`   //磁盘
+	Memory Memory `json:"memory"` //内存
+	Sys    Sys    `json:"sys"`    //系统
+}
+
+type RedisReq struct {
+}
+
+type RedisResp struct {
+	Info         map[string]string   `json:"info"`
+	CommandStats []map[string]string `json:"commandStats"`
+	DbSize       int64               `json:"dbSize"`
 }
 
 type DashboardSpeechReq struct {

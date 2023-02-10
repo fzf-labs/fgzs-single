@@ -1190,6 +1190,23 @@
         ]
       }
     },
+    "/system/redis": {
+      "get": {
+        "summary": "redis",
+        "operationId": "redis",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RedisResp"
+            }
+          }
+        },
+        "tags": [
+          "system"
+        ]
+      }
+    },
     "/system/stat": {
       "get": {
         "summary": "服务器状态",
@@ -1233,28 +1250,25 @@
           "type": "string",
           "description": "CPU制造商ID"
         },
-        "modelName": {
+        "cpuModel": {
           "type": "string",
           "description": "cpu具体型号"
         },
-        "cores": {
+        "coreNum": {
           "type": "string",
           "description": "核心数"
         },
-        "coresLoad": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/float64"
-          },
-          "description": "核心占用"
+        "percent": {
+          "type": "string",
+          "description": "百分比"
         }
       },
       "title": "Cpu",
       "required": [
         "vendorId",
-        "modelName",
-        "cores",
-        "coresLoad"
+        "cpuModel",
+        "coreNum",
+        "percent"
       ]
     },
     "DashboardSpeechReq": {
@@ -1276,29 +1290,44 @@
     "Disk": {
       "type": "object",
       "properties": {
+        "dirName": {
+          "type": "string",
+          "description": "盘符路径"
+        },
+        "sysTypeName": {
+          "type": "string",
+          "description": "文件系统"
+        },
+        "typeName": {
+          "type": "string",
+          "description": "盘符类型"
+        },
         "total": {
           "type": "string",
           "description": "总占用"
-        },
-        "available": {
-          "type": "string",
-          "description": "可用的"
         },
         "used": {
           "type": "string",
           "description": "已使用"
         },
-        "usedPercent": {
+        "free": {
+          "type": "string",
+          "description": "可用的"
+        },
+        "usage": {
           "type": "string",
           "description": "使用占比"
         }
       },
       "title": "Disk",
       "required": [
+        "dirName",
+        "sysTypeName",
+        "typeName",
         "total",
-        "available",
         "used",
-        "usedPercent"
+        "free",
+        "usage"
       ]
     },
     "FileDelReq": {
@@ -1527,15 +1556,15 @@
           "type": "string",
           "description": "总占用"
         },
-        "available": {
-          "type": "string",
-          "description": "可用的"
-        },
         "used": {
           "type": "string",
           "description": "已使用"
         },
-        "usedPercent": {
+        "free": {
+          "type": "string",
+          "description": "可用的"
+        },
+        "usage": {
           "type": "string",
           "description": "使用占比"
         }
@@ -1543,9 +1572,9 @@
       "title": "Memory",
       "required": [
         "total",
-        "available",
         "used",
-        "usedPercent"
+        "free",
+        "usage"
       ]
     },
     "Paginator": {
@@ -1600,37 +1629,32 @@
       "type": "object",
       "title": "PingResp"
     },
-    "Runtime": {
+    "RedisReq": {
+      "type": "object",
+      "title": "RedisReq"
+    },
+    "RedisResp": {
       "type": "object",
       "properties": {
-        "goVersion": {
-          "type": "string",
-          "description": "golang 版本"
+        "info": {
+          "type": "object"
         },
-        "npmVersion": {
-          "type": "string",
-          "description": "npm 版本"
+        "commandStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/map[string]string"
+          }
         },
-        "nodeVersion": {
-          "type": "string",
-          "description": "node 版本"
-        },
-        "os": {
-          "type": "string",
-          "description": "系统"
-        },
-        "arch": {
-          "type": "string",
-          "description": "架构"
+        "dbSize": {
+          "type": "integer",
+          "format": "int64"
         }
       },
-      "title": "Runtime",
+      "title": "RedisResp",
       "required": [
-        "goVersion",
-        "npmVersion",
-        "nodeVersion",
-        "os",
-        "arch"
+        "info",
+        "commandStats",
+        "dbSize"
       ]
     },
     "SearchParam": {
@@ -2004,16 +2028,19 @@
           "description": "cpu"
         },
         "disk": {
-          "$ref": "#/definitions/Disk",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Disk"
+          },
           "description": "磁盘"
         },
         "memory": {
           "$ref": "#/definitions/Memory",
           "description": "内存"
         },
-        "runtime": {
-          "$ref": "#/definitions/Runtime",
-          "description": "运行"
+        "sys": {
+          "$ref": "#/definitions/Sys",
+          "description": "系统"
         }
       },
       "title": "StatResp",
@@ -2021,7 +2048,70 @@
         "cpu",
         "disk",
         "memory",
-        "runtime"
+        "sys"
+      ]
+    },
+    "Sys": {
+      "type": "object",
+      "properties": {
+        "computerName": {
+          "type": "string",
+          "description": "服务器名称"
+        },
+        "localIp": {
+          "type": "string",
+          "description": "内网ip"
+        },
+        "publicIp": {
+          "type": "string",
+          "description": "外网ip"
+        },
+        "os": {
+          "type": "string",
+          "description": "系统类型"
+        },
+        "arch": {
+          "type": "string",
+          "description": "系统架构"
+        },
+        "goVersion": {
+          "type": "string",
+          "description": "golang 版本"
+        },
+        "npmVersion": {
+          "type": "string",
+          "description": "npm 版本"
+        },
+        "nodeVersion": {
+          "type": "string",
+          "description": "node 版本"
+        },
+        "projectPath": {
+          "type": "string",
+          "description": "项目地址"
+        },
+        "projectStartTime": {
+          "type": "string",
+          "description": "项目启动时间"
+        },
+        "projectRunTime": {
+          "type": "string",
+          "description": "项目运行时间"
+        }
+      },
+      "title": "Sys",
+      "required": [
+        "computerName",
+        "localIp",
+        "publicIp",
+        "os",
+        "arch",
+        "goVersion",
+        "npmVersion",
+        "nodeVersion",
+        "projectPath",
+        "projectStartTime",
+        "projectRunTime"
       ]
     },
     "SysAdminGenerateAvatarReq": {
