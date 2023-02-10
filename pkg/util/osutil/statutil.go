@@ -171,11 +171,11 @@ func GetSysInfo() (*SysInfo, error) {
 	}
 	curProc, err := process.NewProcess(int32(os.Getpid()))
 	startTime, err := curProc.CreateTime()
-
+	publicIp, _ := iputil.GetPublicIPByHttp()
 	return &SysInfo{
 		ComputerName:     infoStat.Hostname,
 		LocalIp:          iputil.GetLocalIp(),
-		PublicIp:         iputil.GetPublicIP(),
+		PublicIp:         publicIp,
 		Os:               infoStat.OS,
 		Arch:             infoStat.KernelArch,
 		GoVersion:        runtime.Version(),
