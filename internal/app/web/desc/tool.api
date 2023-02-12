@@ -56,6 +56,12 @@ type (
     }
 )
 
+type (
+    ChatGPTReq {
+    }
+    ChatGPTResp {
+    }
+)
 
 @server(
     group : tool
@@ -85,4 +91,10 @@ service web {
     )
     @handler Websocket
     get /websocket (WebsocketReq) returns (WebsocketResp)
+
+    @doc(
+        summary: "ChatGPT"
+    )
+    @handler ChatGPT
+    get /chatgpt (ChatGPTReq) returns (ChatGPTResp)
 }

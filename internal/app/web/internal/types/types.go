@@ -60,3 +60,9 @@ type WebsocketReq struct {
 
 type WebsocketResp struct {
 }
+
+type ChatGPTReq struct {
+}
+
+type ChatGPTResp struct {
+}

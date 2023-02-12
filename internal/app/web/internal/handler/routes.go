@@ -44,6 +44,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/websocket",
 				Handler: tool.WebsocketHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/chatgpt",
+				Handler: tool.ChatGPTHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/tool"),
 	)

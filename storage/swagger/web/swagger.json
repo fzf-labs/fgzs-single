@@ -32,6 +32,23 @@
         ]
       }
     },
+    "tool/chatgpt": {
+      "get": {
+        "summary": "ChatGPT",
+        "operationId": "ChatGPT",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ChatGPTResp"
+            }
+          }
+        },
+        "tags": [
+          "tool"
+        ]
+      }
+    },
     "tool/iplocation": {
       "post": {
         "summary": "IpLocation",
@@ -132,6 +149,14 @@
     }
   },
   "definitions": {
+    "ChatGPTReq": {
+      "type": "object",
+      "title": "ChatGPTReq"
+    },
+    "ChatGPTResp": {
+      "type": "object",
+      "title": "ChatGPTResp"
+    },
     "IpLocationReq": {
       "type": "object",
       "properties": {
