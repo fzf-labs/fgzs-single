@@ -1,0 +1,31 @@
+syntax = "v1"
+
+info(
+    title: "短连接"
+    desc: ""
+    author: ""
+    email: ""
+    version: ""
+)
+
+type (
+    TinyUrlReq {
+        Id string `path:"id"`
+    }
+    TinyUrlResp {
+        OriginalUrl string `json:"originalUrl"`
+        Expired     int64 `json:"expired"`
+    }
+)
+
+@server(
+    group : tinyurl
+    prefix : tinyurl
+)
+service web {
+    @doc(
+        summary: "短连接跳转"
+    )
+    @handler TinyUrl
+    get /:id (TinyUrlReq) returns (TinyUrlResp)
+}

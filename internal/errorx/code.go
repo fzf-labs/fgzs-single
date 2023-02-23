@@ -117,3 +117,7 @@ var (
 	BaiduFailedToCreateTheListenerOnlySpaceFolder      = NewError(21203, "倾听者专属空间文件夹创建失败")
 	BaiduCloudDiskFileTransferFailed                   = NewError(21204, "百度云盘文件转移失败")
 )
+
+var (
+	ShortLinkError = NewError(21300, "短链接错误")
+)

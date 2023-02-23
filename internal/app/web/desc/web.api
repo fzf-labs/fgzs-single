@@ -3,6 +3,7 @@ syntax = "v1"
 import (
 	"system.api"
 	"tool.api"
+	"tinyurl.api"
 )
 
 info(

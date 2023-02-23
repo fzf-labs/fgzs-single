@@ -32,6 +32,31 @@
         ]
       }
     },
+    "tinyurl/{id}": {
+      "get": {
+        "summary": "短连接跳转",
+        "operationId": "TinyUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/TinyUrlResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "tinyurl"
+        ]
+      }
+    },
     "tool/chatgpt": {
       "get": {
         "summary": "ChatGPT",
@@ -259,6 +284,27 @@
       "title": "SqlToStructResp",
       "required": [
         "code"
+      ]
+    },
+    "TinyUrlReq": {
+      "type": "object",
+      "title": "TinyUrlReq"
+    },
+    "TinyUrlResp": {
+      "type": "object",
+      "properties": {
+        "originalUrl": {
+          "type": "string"
+        },
+        "expired": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "TinyUrlResp",
+      "required": [
+        "originalUrl",
+        "expired"
       ]
     },
     "UaLocation": {

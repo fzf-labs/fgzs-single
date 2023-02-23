@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	system "fgzs-single/internal/app/web/internal/handler/system"
+	tinyurl "fgzs-single/internal/app/web/internal/handler/tinyurl"
 	tool "fgzs-single/internal/app/web/internal/handler/tool"
 	"fgzs-single/internal/app/web/internal/svc"
 
@@ -51,5 +52,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/tool"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/:id",
+				Handler: tinyurl.TinyUrlHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/tinyurl"),
 	)
 }

@@ -66,3 +66,12 @@ type ChatGPTReq struct {
 
 type ChatGPTResp struct {
 }
+
+type TinyUrlReq struct {
+	Id string `path:"id"`
+}
+
+type TinyUrlResp struct {
+	OriginalUrl string `json:"originalUrl"`
+	Expired     int64  `json:"expired"`
+}

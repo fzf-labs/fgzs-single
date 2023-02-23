@@ -33,6 +33,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		SysLog:            newSysLog(db, opts...),
 		SysPermMenu:       newSysPermMenu(db, opts...),
 		SysRole:           newSysRole(db, opts...),
+		TinyURL:           newTinyURL(db, opts...),
 		User:              newUser(db, opts...),
 		UserAuth:          newUserAuth(db, opts...),
 		UserCancellation:  newUserCancellation(db, opts...),
@@ -58,6 +59,7 @@ type Query struct {
 	SysLog            sysLog
 	SysPermMenu       sysPermMenu
 	SysRole           sysRole
+	TinyURL           tinyURL
 	User              user
 	UserAuth          userAuth
 	UserCancellation  userCancellation
@@ -84,6 +86,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		SysLog:            q.SysLog.clone(db),
 		SysPermMenu:       q.SysPermMenu.clone(db),
 		SysRole:           q.SysRole.clone(db),
+		TinyURL:           q.TinyURL.clone(db),
 		User:              q.User.clone(db),
 		UserAuth:          q.UserAuth.clone(db),
 		UserCancellation:  q.UserCancellation.clone(db),
@@ -117,6 +120,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		SysLog:            q.SysLog.replaceDB(db),
 		SysPermMenu:       q.SysPermMenu.replaceDB(db),
 		SysRole:           q.SysRole.replaceDB(db),
+		TinyURL:           q.TinyURL.replaceDB(db),
 		User:              q.User.replaceDB(db),
 		UserAuth:          q.UserAuth.replaceDB(db),
 		UserCancellation:  q.UserCancellation.replaceDB(db),
@@ -140,6 +144,7 @@ type queryCtx struct {
 	SysLog            *sysLogDo
 	SysPermMenu       *sysPermMenuDo
 	SysRole           *sysRoleDo
+	TinyURL           *tinyURLDo
 	User              *userDo
 	UserAuth          *userAuthDo
 	UserCancellation  *userCancellationDo
@@ -163,6 +168,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		SysLog:            q.SysLog.WithContext(ctx),
 		SysPermMenu:       q.SysPermMenu.WithContext(ctx),
 		SysRole:           q.SysRole.WithContext(ctx),
+		TinyURL:           q.TinyURL.WithContext(ctx),
 		User:              q.User.WithContext(ctx),
 		UserAuth:          q.UserAuth.WithContext(ctx),
 		UserCancellation:  q.UserCancellation.WithContext(ctx),
