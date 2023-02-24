@@ -31,37 +31,40 @@ func (l *TinyUrlLogic) TinyUrl(req *types.TinyUrlReq) (resp *types.TinyUrlResp, 
 	resp = new(types.TinyUrlResp)
 	//进程内缓存查找->布隆过滤器查找->redis->mysql
 	cacheKey := cachekey.TinyUrl.BuildCacheKey(req.Id)
-	result, ok := l.svcCtx.TinyUrlCollectionCache.Get(cacheKey.Key())
-	if ok {
-		urlResp, ok := result.(types.TinyUrlResp)
-		if ok {
-			resp.OriginalUrl = urlResp.OriginalUrl
-			resp.Expired = urlResp.Expired
-			return resp, nil
-		} else {
-			return nil, errorx.ShortLinkError
-		}
-	}
-	err = cacheKey.AutoCache(l.svcCtx.Redis, resp, func() (string, error) {
-		tinyURLDao := dao.Use(l.svcCtx.Gorm).TinyURL
-		tinyURL, err := tinyURLDao.WithContext(l.ctx).Where(tinyURLDao.TinyURL.Eq(req.Id)).First()
-		if err != nil && err != gorm.ErrRecordNotFound {
-			return "", errorx.DataSqlErr.WithDetail(err)
-		}
-		if tinyURL == nil {
-			return "", errorx.DataRecordNotFound
-		}
-		res, err := jsonutil.EncodeToString(types.TinyUrlResp{
-			OriginalUrl: tinyURL.OriginalURL,
-			Expired:     tinyURL.Expired,
+	res, err := l.svcCtx.TinyUrlCollectionCache.Take(cacheKey.Key(), func() (interface{}, error) {
+		var res1 types.TinyUrlResp
+		err = cacheKey.AutoCache(l.svcCtx.Redis, &res1, func() (string, error) {
+			tinyURLDao := dao.Use(l.svcCtx.Gorm).TinyURL
+			tinyURL, err := tinyURLDao.WithContext(l.ctx).Where(tinyURLDao.TinyURL.Eq(req.Id)).First()
+			if err != nil && err != gorm.ErrRecordNotFound {
+				return "", errorx.DataSqlErr.WithDetail(err)
+			}
+			var res2 types.TinyUrlResp
+			if tinyURL != nil {
+				res2 = types.TinyUrlResp{
+					OriginalUrl: tinyURL.OriginalURL,
+					Expired:     tinyURL.Expired,
+				}
+			}
+			res3, err := jsonutil.EncodeToString(res2)
+			if err != nil {
+				return "", err
+			}
+			return res3, nil
 		})
 		if err != nil {
-			return "", err
+			return nil, err
 		}
-		return res, nil
+		return res1, nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return
+	urlResp, ok := res.(types.TinyUrlResp)
+	if !ok {
+		return nil, errorx.ShortLinkError
+	}
+	resp.OriginalUrl = urlResp.OriginalUrl
+	resp.Expired = urlResp.Expired
+	return resp, nil
 }
