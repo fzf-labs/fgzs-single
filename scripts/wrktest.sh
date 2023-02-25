@@ -11,7 +11,7 @@ API 性能测试脚本，会自动执行 wrk 命令，采集数据、分析数�
 
 使用方式 (对比2次测试结果)
 1. 性能测试：./wrktest.sh http://127.0.0.1:9090/ping
-2. 执行命令： ./wrktest.sh diff apiserver.dat http.dat
+2. 执行命令： ./wrktest.sh diff apiServer.dat http.dat
 
 > Note: 需要确保系统安装了 wrk 和 gnuplot 工具
 EOF
@@ -19,7 +19,7 @@ EOF
 #根目录
 rootDir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 wrkDir="${rootDir}/_output/wrk"
-jobName="apiserver"
+jobName="apiServer"
 duration="30s"
 COLOR_MAGENTA="\033[35m"
 COLOR_NORMAL="\033[0m"
@@ -60,7 +60,7 @@ OPTIONS:
 EOF
 }
 
-# Convert plot data to useable data
+# 将绘图数据转换为可用数据
 function wrk::convert_plot_data()
 {
   echo "$1" | awk -v datfile="${wrkDir}/${datfile}" ' {
@@ -117,13 +117,13 @@ if (s ~ "s") {
 }'
 }
 
-# Remove existing data file
+# 删除现有数据文件
 function wrk::prepare()
 {
   rm -f ${wrkDir}/${datfile}
 }
 
-# Plot according to gunplot data file
+# 根据gunplot数据文件进行绘图
 function wrk::plot() {
   gnuplot <<  EOF
 set terminal png enhanced #输出格式为png文件
@@ -161,7 +161,7 @@ plot "${wrkDir}/${datfile}" using 4:xticlabels(1) w lp pt 7 ps 1 lc rgbcolor "#F
 EOF
 }
 
-# Plot diff graphic
+# 绘图差异图形
 function wrk::plot_diff()
 {
   gnuplot <<  EOF
@@ -207,7 +207,7 @@ plot "/tmp/plot_diff.dat" using 4:xticlabels(1) w lp pt 7 ps 1 lc rgbcolor "#EE0
 EOF
 }
 
-# Start API performance testing
+# 启动API性能测试
 wrk::start_performance_test() {
   wrk::prepare
 
