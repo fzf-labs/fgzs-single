@@ -170,8 +170,17 @@ func GetSysInfo() (*SysInfo, error) {
 		return nil, err
 	}
 	curProc, err := process.NewProcess(int32(os.Getpid()))
+	if err != nil {
+		return nil, err
+	}
 	startTime, err := curProc.CreateTime()
-	publicIp, _ := iputil.GetPublicIPByHttp()
+	if err != nil {
+		return nil, err
+	}
+	publicIp, err := iputil.GetPublicIPByHttp()
+	if err != nil {
+		return nil, err
+	}
 	return &SysInfo{
 		ComputerName:     infoStat.Hostname,
 		LocalIp:          iputil.GetLocalIp(),

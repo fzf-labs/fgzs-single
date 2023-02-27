@@ -38,8 +38,7 @@ func (l *SysAdminPermMenuLogic) SysAdminPermMenu(req *types.SysAdminPermMenuReq)
 	resp := new(types.SysAdminPermMenuResp)
 	adminId := meta.GetAdminId(l.ctx)
 	cacheKey := cachekey.SysAdminPermmenu.BuildCacheKey(strconv.FormatInt(adminId, 10))
-	var result []types.SysAdminMenu
-	err := cacheKey.AutoCache(l.svcCtx.Redis, &result, func() (string, error) {
+	res, err := cacheKey.RocksCache(l.svcCtx.RocksCache, func() (string, error) {
 		sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
 		sysRoleDao := dao.Use(l.svcCtx.Gorm).SysRole
 		sysPermMenuDao := dao.Use(l.svcCtx.Gorm).SysPermMenu
@@ -121,7 +120,10 @@ func (l *SysAdminPermMenuLogic) SysAdminPermMenu(req *types.SysAdminPermMenuReq)
 	if err != nil {
 		return nil, err
 	}
-	resp.Menus = result
+	err = jsonutil.DecodeString(res, resp.Menus)
+	if err != nil {
+		return nil, err
+	}
 	return resp, nil
 }
 

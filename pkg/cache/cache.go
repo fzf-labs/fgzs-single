@@ -1,23 +1,15 @@
 package cache
 
 import (
-	"encoding/json"
-	"github.com/zeromicro/go-zero/core/stores/redis"
-	"github.com/zeromicro/go-zero/core/syncx"
-	"sync"
+	"github.com/dtm-labs/rockscache"
+	"github.com/zeromicro/go-zero/core/collection"
 	"time"
-)
-
-var (
-	// can't use one SingleFlight per conn, because multiple conns may share the same cache key.
-	singleFlight = syncx.NewSingleFlight()
 )
 
 // Key 实际key参数
 type Key struct {
 	keyPrefix *KeyPrefix
 	buildKey  string
-	lock      sync.RWMutex
 }
 
 // Key 获取构建好的key
@@ -35,42 +27,55 @@ func (p *Key) TTLSecond() int {
 	return int(p.keyPrefix.ExpirationTime / time.Second)
 }
 
-// AutoCache 自动缓存
-func (p *Key) AutoCache(rd *redis.Redis, result interface{}, fn func() (string, error)) error {
-	val, err := singleFlight.Do(p.Key(), func() (interface{}, error) {
-		p.lock.RLock()
-		defer p.lock.RUnlock()
-		res, err := rd.Get(p.Key())
-		if err != nil && err != redis.Nil {
-			return nil, err
-		}
-		if res != "" {
-			return res, nil
-		}
-		res, err = fn()
-		if err != nil {
-			return nil, err
-		}
-		err = rd.Setex(p.Key(), res, p.TTLSecond())
-		if err != nil {
-			return nil, err
-		}
-		return res, nil
+// RocksCache  rocks缓存生成
+func (p *Key) RocksCache(rc *rockscache.Client, fn func() (string, error)) (string, error) {
+	return rc.Fetch(p.Key(), p.TTL(), fn)
+}
+
+// RocksCacheDel rocks缓存缓存删除
+func (p *Key) RocksCacheDel(rc *rockscache.Client) error {
+	return rc.TagAsDeleted(p.Key())
+}
+
+// CollectionCache 进程内缓存生成
+func (p *Key) CollectionCache(cc *collection.Cache, fn func() (string, error)) (string, error) {
+	take, err := cc.Take(p.Key(), func() (interface{}, error) {
+		return fn()
 	})
 	if err != nil {
-		return err
+		return "", err
 	}
-	s := val.(string)
-	err = json.Unmarshal([]byte(s), result)
-	if err != nil {
-		return err
-	}
+	return take.(string), nil
+}
+
+// CollectionCacheDel 进程内缓存
+func (p *Key) CollectionCacheDel(cc *collection.Cache) error {
+	cc.Del(p.Key())
 	return nil
 }
 
-// Delete 删除数据
-func (p *Key) Delete(rd *redis.Redis) error {
-	_, err := rd.Del(p.Key())
+// CollectionRocksCache 进程内缓存生成(该方法设计不完善,仅用于不更新的数据)
+// 1.查询进程内的缓存,有则返回,无则去获取rockscache.
+// 2.进程内缓存的过期时间请务必设置远小于redis.例小20倍
+// 3.进程内缓存在数据发生更新时,未做删除处理,所以请务必谨慎.(一般需要去做订阅redis的pub/sub)
+func (p *Key) CollectionRocksCache(cc *collection.Cache, rc *rockscache.Client, fn func() (string, error)) (string, error) {
+	ccRes, err := cc.Take(p.Key(), func() (interface{}, error) {
+		rcRes, err := rc.Fetch(p.Key(), p.TTL(), fn)
+		if err != nil {
+			return nil, err
+		}
+		return rcRes, nil
+	})
+	if err != nil {
+		return "", err
+	}
+	return ccRes.(string), nil
+}
+
+// CollectionRocksCacheDel 进程内缓存
+func (p *Key) CollectionRocksCacheDel(cc *collection.Cache, rc *rockscache.Client) error {
+	cc.Del(p.Key())
+	err := rc.TagAsDeleted(p.Key())
 	if err != nil {
 		return err
 	}

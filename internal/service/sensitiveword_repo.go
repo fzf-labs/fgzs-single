@@ -6,8 +6,8 @@ import (
 	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/pkg/util/jsonutil"
+	"github.com/dtm-labs/rockscache"
 	"github.com/importcjj/sensitive"
-	"github.com/zeromicro/go-zero/core/stores/redis"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -15,16 +15,16 @@ import (
 var _ iSensitiveWordService = (*SensitiveWordService)(nil)
 
 type SensitiveWordService struct {
-	ctx   context.Context
-	db    *gorm.DB
-	redis *redis.Redis
+	ctx context.Context
+	db  *gorm.DB
+	rc  *rockscache.Client
 }
 type iSensitiveWordService interface {
 	Check(word string) (*SensitiveWordCheck, error)
 }
 
-func NewSensitiveWordService(ctx context.Context, DB *gorm.DB, rd *redis.Redis) *SensitiveWordService {
-	return &SensitiveWordService{ctx: ctx, db: DB, redis: rd}
+func NewSensitiveWordService(ctx context.Context, DB *gorm.DB, rc *rockscache.Client) *SensitiveWordService {
+	return &SensitiveWordService{ctx: ctx, db: DB, rc: rc}
 }
 
 type SensitiveCheck struct {
@@ -44,7 +44,7 @@ type SensitiveWordCheck struct {
 func (s *SensitiveWordService) Words() ([]string, error) {
 	cacheKey := cachekey.SensitiveWord.BuildCacheKey()
 	words := make([]string, 0)
-	err := cacheKey.AutoCache(s.redis, &words, func() (string, error) {
+	res, err := cacheKey.RocksCache(s.rc, func() (string, error) {
 		ws := make([]string, 0)
 		sensitiveWordDao := dao.Use(s.db).SensitiveWord
 		err := sensitiveWordDao.WithContext(s.ctx).Pluck(sensitiveWordDao.Text, &ws)
@@ -57,6 +57,10 @@ func (s *SensitiveWordService) Words() ([]string, error) {
 		}
 		return toString, nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	err = jsonutil.DecodeString(res, &words)
 	if err != nil {
 		return nil, err
 	}

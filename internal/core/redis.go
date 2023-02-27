@@ -23,19 +23,12 @@ func NewRedis(conf RedisConfig) *redis.Redis {
 	})
 }
 
-type RedisDB int
-
-const (
-	DB0 RedisDB = 0
-	DB1 RedisDB = 1
-)
-
 // NewGoRedis 初始化go-redis客户端
-func NewGoRedis(cfg RedisConfig, db RedisDB) *goRedis.Client {
+func NewGoRedis(cfg RedisConfig, db int) *goRedis.Client {
 	Client := goRedis.NewClient(&goRedis.Options{
 		Addr:     cfg.Host,
 		Password: cfg.Pass,
-		DB:       int(db),
+		DB:       db,
 	})
 	_, err := Client.Ping(context.Background()).Result()
 	if err != nil {

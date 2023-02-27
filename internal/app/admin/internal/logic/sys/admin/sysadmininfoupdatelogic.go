@@ -56,7 +56,7 @@ func (l *SysAdminInfoUpdateLogic) SysAdminInfoUpdate(req *types.SysAdminInfoUpda
 		return nil, errorx.DataSqlErr.WithDetail(err)
 	}
 	cacheKey := cachekey.SysAdminInfo.BuildCacheKey(strconv.FormatInt(adminId, 10))
-	err = cacheKey.Delete(l.svcCtx.Redis)
+	err = cacheKey.RocksCacheDel(l.svcCtx.RocksCache)
 	if err != nil {
 		return nil, errorx.DataRedisErr.WithDetail(err)
 	}

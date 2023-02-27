@@ -9,6 +9,7 @@ require (
 	github.com/apache/rocketmq-client-go/v2 v2.1.1
 	github.com/casbin/casbin/v2 v2.56.0
 	github.com/cascax/sql2gorm v0.0.2
+	github.com/dtm-labs/rockscache v0.1.0
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
@@ -93,6 +94,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/juju/errors v0.0.0-20170703010042-c7d06af17c68 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/lithammer/shortuuid v3.0.0+incompatible // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
 	github.com/longbridgeapp/sqlparser v0.3.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
@@ -151,6 +153,7 @@ require (
 	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9 // indirect
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.3.0 // indirect

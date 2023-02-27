@@ -34,8 +34,7 @@ func (l *SysAdminInfoLogic) SysAdminInfo(req *types.SysAdminInfoReq) (*types.Sys
 	resp := new(types.SysAdminInfoResp)
 	adminId := meta.GetAdminId(l.ctx)
 	cacheKey := cachekey.SysAdminInfo.BuildCacheKey(strconv.FormatInt(adminId, 10))
-	var result types.SysAdminInfo
-	err := cacheKey.AutoCache(l.svcCtx.Redis, &result, func() (string, error) {
+	res, err := cacheKey.RocksCache(l.svcCtx.RocksCache, func() (string, error) {
 		sysAdminDao := dao.Use(l.svcCtx.Gorm).SysAdmin
 		sysAdmin, err := sysAdminDao.WithContext(l.ctx).Where(sysAdminDao.ID.Eq(adminId)).First()
 		if err != nil && err != gorm.ErrRecordNotFound {
@@ -70,6 +69,9 @@ func (l *SysAdminInfoLogic) SysAdminInfo(req *types.SysAdminInfoReq) (*types.Sys
 	if err != nil {
 		return nil, err
 	}
-	resp.Info = result
+	err = jsonutil.DecodeString(res, resp.Info)
+	if err != nil {
+		return nil, err
+	}
 	return resp, nil
 }
