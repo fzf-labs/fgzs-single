@@ -24,7 +24,6 @@ func NewChatGPTLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatGPTLo
 }
 
 func (l *ChatGPTLogic) ChatGPT(req *types.ChatGPTReq) (resp *types.ChatGPTResp, err error) {
-	// todo: add your logic here and delete this line
 
 	return
 }

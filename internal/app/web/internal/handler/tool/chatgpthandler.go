@@ -3,7 +3,9 @@ package tool
 import (
 	"fgzs-single/internal/app/web/internal/svc"
 	"fgzs-single/pkg/openai"
+	"fgzs-single/pkg/util/uuidutil"
 	"github.com/gorilla/websocket"
+	"github.com/zeromicro/go-zero/core/collection"
 	"net/http"
 	"time"
 )
@@ -15,14 +17,14 @@ func ChatGPTHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		chatGPT := openai.NewChatGPT(svcCtx.Config.OpenAI.ChatGPT)
-		ChatGPTMessageHandle(upgrade, chatGPT)
+		ChatGPTMessageHandle(upgrade, chatGPT, svcCtx.CollectionCacheChatGpt)
 	}
 }
 
 // ChatGPTWsUpgrade websocket 连接
 func ChatGPTWsUpgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	ws := websocket.Upgrader{
-		HandshakeTimeout: time.Second * 5,
+		HandshakeTimeout: time.Minute * 5,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
@@ -35,24 +37,38 @@ func ChatGPTWsUpgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, 
 }
 
 // ChatGPTMessageHandle 发送消息
-func ChatGPTMessageHandle(conn *websocket.Conn, gpt *openai.ChatGPT) {
+func ChatGPTMessageHandle(conn *websocket.Conn, gpt *openai.ChatGPT, chatGptCache *collection.Cache) {
 	defer func() {
 		err := conn.Close()
 		if err != nil {
 			return
 		}
 	}()
+	clientId := uuidutil.KSUidByTime()
 	for {
 		_, req, err := conn.ReadMessage()
 		if err != nil {
 			return
 		}
+		messages := make([]openai.ChatMessage, 0)
 		var resp []byte
-		completions, err := gpt.Completions(string(req))
+		oldMessage, ok := chatGptCache.Get(clientId)
+		if ok {
+			chatMessages, ok := oldMessage.([]openai.ChatMessage)
+			if ok {
+				messages = append(messages, chatMessages...)
+			}
+		}
+		messages = append(messages, openai.ChatMessage{
+			Role:    "user",
+			Content: string(req),
+		})
+		completions, err := gpt.ChatCompletions(messages)
 		if err != nil {
 			return
 		}
-		resp = []byte(completions)
+		chatGptCache.Set(clientId, messages)
+		resp = []byte(completions.Content)
 		err = conn.WriteMessage(websocket.TextMessage, resp)
 		if err != nil {
 			return

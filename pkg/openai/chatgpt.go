@@ -3,6 +3,7 @@ package openai
 import (
 	"fmt"
 	"github.com/imroc/req/v3"
+	"log"
 )
 
 type ChatGPT struct {
@@ -101,6 +102,7 @@ type ChatCompletionsResp struct {
 }
 
 func (c *ChatGPT) ChatCompletions(messages []ChatMessage) (*ChatMessage, error) {
+	log.Println(messages)
 	var result *ChatMessage
 	url := "https://api.openai.com/v1/chat/completions"
 	param := &ChatCompletionsReq{
@@ -118,6 +120,7 @@ func (c *ChatGPT) ChatCompletions(messages []ChatMessage) (*ChatMessage, error) 
 	if err != nil {
 		return nil, err
 	}
+	log.Println(resp)
 	if !resp.IsSuccessState() {
 		return nil, fmt.Errorf("bad response status: %s", resp.Status)
 	}

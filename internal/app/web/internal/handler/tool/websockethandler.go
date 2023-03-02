@@ -23,7 +23,7 @@ func WebsocketHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 // WsUpgrade websocket 连接
 func WsUpgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	ws := websocket.Upgrader{
-		HandshakeTimeout: time.Second * 5,
+		HandshakeTimeout: time.Minute * 5,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},

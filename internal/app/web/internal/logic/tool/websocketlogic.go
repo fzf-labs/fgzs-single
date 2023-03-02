@@ -24,7 +24,5 @@ func NewWebsocketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Websock
 }
 
 func (l *WebsocketLogic) Websocket(req *types.WebsocketReq) (resp *types.WebsocketResp, err error) {
-	// todo: add your logic here and delete this line
-
 	return
 }

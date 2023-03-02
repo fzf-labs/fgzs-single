@@ -15,7 +15,7 @@ func TestChatGPT_Completions(t *testing.T) {
 }
 
 func TestChatGPT_ChatCompletions(t *testing.T) {
-	newChatGPT := NewChatGPT("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")
+	newChatGPT := NewChatGPT("")
 	var msg = []ChatMessage{
 		{
 			Role:    "user",
