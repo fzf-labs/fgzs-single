@@ -13,3 +13,18 @@ func TestChatGPT_Completions(t *testing.T) {
 	}
 	fmt.Println(completions)
 }
+
+func TestChatGPT_ChatCompletions(t *testing.T) {
+	newChatGPT := NewChatGPT("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")
+	var msg = []ChatMessage{
+		{
+			Role:    "user",
+			Content: "今天是几号?",
+		},
+	}
+	completions, err := newChatGPT.ChatCompletions(msg)
+	if err != nil {
+		return
+	}
+	fmt.Println(completions)
+}
