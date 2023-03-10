@@ -2,9 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"fgzs-single/pkg/util/fileutil"
 	"flag"
 	"fmt"
+	"github.com/fzf-labs/fpkg/util/fileutil"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 	"path/filepath"

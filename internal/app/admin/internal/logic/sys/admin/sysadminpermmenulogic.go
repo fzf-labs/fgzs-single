@@ -8,8 +8,8 @@ import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
-	"fgzs-single/pkg/util/jsonutil"
-	"fgzs-single/pkg/util/sliutil"
+	"github.com/fzf-labs/fpkg/util/jsonutil"
+	"github.com/fzf-labs/fpkg/util/sliutil"
 	"gorm.io/gorm"
 	"strconv"
 

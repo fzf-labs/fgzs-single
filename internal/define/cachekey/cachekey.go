@@ -1,7 +1,7 @@
 package cachekey
 
 import (
-	"fgzs-single/pkg/cache"
+	"github.com/fzf-labs/fpkg/cache"
 	"time"
 )
 

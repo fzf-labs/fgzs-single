@@ -6,7 +6,7 @@ import (
 	"fgzs-single/internal/app/admin/internal/types"
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/util/timeutil"
+	"github.com/fzf-labs/fpkg/util/timeutil"
 	"gorm.io/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"

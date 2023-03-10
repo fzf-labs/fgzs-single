@@ -4,20 +4,21 @@ import (
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/internal/response"
-	"fgzs-single/pkg/conv"
-	"fgzs-single/pkg/jwt"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/stores/redis"
+	"github.com/fzf-labs/fpkg/conv"
+	"github.com/fzf-labs/fpkg/jwt"
+	"github.com/go-redis/redis/v8"
+
 	"net/http"
 	"time"
 )
 
 type JwtMiddleware struct {
-	Redis     *redis.Redis
+	Redis     *redis.Client
 	JwtConfig *jwt.Config
 }
 
-func NewJwtMiddleware(config *jwt.Config, redis *redis.Redis) *JwtMiddleware {
+func NewJwtMiddleware(config *jwt.Config, redis *redis.Client) *JwtMiddleware {
 	return &JwtMiddleware{
 		Redis:     redis,
 		JwtConfig: config,

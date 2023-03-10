@@ -7,7 +7,7 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/util/jsonutil"
+	"github.com/fzf-labs/fpkg/util/jsonutil"
 	"gorm.io/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"

@@ -2,7 +2,7 @@ package tool
 
 import (
 	"fgzs-single/internal/app/web/internal/svc"
-	"fgzs-single/pkg/openai"
+	"github.com/fzf-labs/fpkg/third_api/openai"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"strings"

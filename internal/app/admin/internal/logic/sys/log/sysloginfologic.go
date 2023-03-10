@@ -5,7 +5,7 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/repo"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/util/timeutil"
+	"github.com/fzf-labs/fpkg/util/timeutil"
 	"gorm.io/gorm"
 
 	"fgzs-single/internal/app/admin/internal/svc"

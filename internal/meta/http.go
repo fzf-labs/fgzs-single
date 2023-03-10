@@ -3,7 +3,7 @@ package meta
 import (
 	"context"
 	"fgzs-single/internal/define/constant"
-	"fgzs-single/pkg/conv"
+	"github.com/fzf-labs/fpkg/conv"
 )
 
 // GetUid  从Context中获取用户ID

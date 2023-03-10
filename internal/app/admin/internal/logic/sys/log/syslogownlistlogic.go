@@ -6,8 +6,8 @@ import (
 	"fgzs-single/internal/dal/repo"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
-	"fgzs-single/pkg/page"
-	"fgzs-single/pkg/util/timeutil"
+	"github.com/fzf-labs/fpkg/page"
+	"github.com/fzf-labs/fpkg/util/timeutil"
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 

@@ -2,7 +2,7 @@ package system
 
 import (
 	"context"
-	"fgzs-single/internal/core"
+	"github.com/fzf-labs/fpkg/cache"
 	"strings"
 
 	"fgzs-single/internal/app/admin/internal/svc"
@@ -26,15 +26,14 @@ func NewRedisLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RedisLogic 
 }
 func (l *RedisLogic) Redis(req *types.RedisReq) (*types.RedisResp, error) {
 	resp := new(types.RedisResp)
-	redis := core.NewGoRedis(l.svcCtx.Config.Redis, 0)
-	commandstats := core.RedisInfo(redis, "commandstats")
+	commandstats := cache.RedisInfo(l.svcCtx.GoRedis, "commandstats")
 	for k, v := range commandstats {
 		resp.CommandStats = append(resp.CommandStats, map[string]string{
 			"name":  strings.Split(k, "_")[1],
 			"value": v[strings.Index(v, "=")+1 : strings.Index(v, ",")],
 		})
 	}
-	resp.Info = core.RedisInfo(redis)
-	resp.DbSize = core.DBSize(redis)
+	resp.Info = cache.RedisInfo(l.svcCtx.GoRedis)
+	resp.DbSize = cache.DBSize(l.svcCtx.GoRedis)
 	return resp, nil
 }

@@ -2,7 +2,7 @@ package tool
 
 import (
 	"context"
-	userAgent "fgzs-single/pkg/useragent"
+	userAgent "github.com/fzf-labs/fpkg/useragent"
 	"github.com/jinzhu/copier"
 
 	"fgzs-single/internal/app/web/internal/svc"

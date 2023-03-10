@@ -9,7 +9,7 @@ import (
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/internal/response"
-	"fgzs-single/pkg/util/jsonutil"
+	"github.com/fzf-labs/fpkg/util/jsonutil"
 	"github.com/tidwall/gjson"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/datatypes"

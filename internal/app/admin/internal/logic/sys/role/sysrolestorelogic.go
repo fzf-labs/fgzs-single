@@ -5,7 +5,7 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/util/sliutil"
+	"github.com/fzf-labs/fpkg/util/sliutil"
 
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"

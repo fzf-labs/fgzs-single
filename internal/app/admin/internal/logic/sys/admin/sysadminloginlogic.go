@@ -5,8 +5,8 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/crypt"
-	"fgzs-single/pkg/jwt"
+	"github.com/fzf-labs/fpkg/crypt"
+	"github.com/fzf-labs/fpkg/jwt"
 	"github.com/mojocn/base64Captcha"
 	"gorm.io/gorm"
 

@@ -7,7 +7,7 @@ import (
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/internal/response"
-	"fgzs-single/pkg/crypt"
+	"github.com/fzf-labs/fpkg/crypt"
 	"net/http"
 )
 

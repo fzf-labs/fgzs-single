@@ -2,10 +2,10 @@ package tool
 
 import (
 	"fgzs-single/internal/app/web/internal/svc"
-	"fgzs-single/pkg/openai"
-	"fgzs-single/pkg/util/uuidutil"
+	"github.com/fzf-labs/fpkg/cache/collectioncache"
+	"github.com/fzf-labs/fpkg/third_api/openai"
+	"github.com/fzf-labs/fpkg/util/uuidutil"
 	"github.com/gorilla/websocket"
-	"github.com/zeromicro/go-zero/core/collection"
 	"net/http"
 	"time"
 )
@@ -37,7 +37,7 @@ func ChatGPTWsUpgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, 
 }
 
 // ChatGPTMessageHandle 发送消息
-func ChatGPTMessageHandle(conn *websocket.Conn, gpt *openai.ChatGPT, chatGptCache *collection.Cache) {
+func ChatGPTMessageHandle(conn *websocket.Conn, gpt *openai.ChatGPT, chatGptCache *collectioncache.Cache) {
 	defer func() {
 		err := conn.Close()
 		if err != nil {

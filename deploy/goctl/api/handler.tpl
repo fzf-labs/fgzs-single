@@ -5,7 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/response"
-	"fgzs-single/pkg/validatorx"
+	"github.com/fzf-labs/fpkg/validatorx"
 	"fgzs-single/internal/define/constant"
 	{{.ImportPackages}}
 )

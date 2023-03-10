@@ -3,10 +3,9 @@ package errorx
 import (
 	"encoding/json"
 	"fgzs-single/internal/errorx/i18n"
-	"fgzs-single/pkg/baiduai"
-	"fgzs-single/pkg/util/fileutil"
-
 	"fmt"
+	"github.com/fzf-labs/fpkg/third_api/baiduai"
+	"github.com/fzf-labs/fpkg/util/fileutil"
 	"sort"
 	"strconv"
 )

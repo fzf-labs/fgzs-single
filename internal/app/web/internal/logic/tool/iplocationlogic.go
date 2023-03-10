@@ -2,10 +2,9 @@ package tool
 
 import (
 	"context"
-	"fgzs-single/pkg/iplocation"
-
 	"fgzs-single/internal/app/web/internal/svc"
 	"fgzs-single/internal/app/web/internal/types"
+	"github.com/fzf-labs/fpkg/iplocation"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

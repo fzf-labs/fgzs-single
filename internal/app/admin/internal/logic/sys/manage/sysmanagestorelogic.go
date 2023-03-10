@@ -7,10 +7,11 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
 	"fgzs-single/internal/errorx"
-	avatar2 "fgzs-single/pkg/avatar"
-	"fgzs-single/pkg/crypt"
-	"fgzs-single/pkg/util/jsonutil"
-	"fgzs-single/pkg/util/strutil"
+	"github.com/fzf-labs/fpkg/crypt"
+	avatar2 "github.com/fzf-labs/fpkg/third_api/avatar"
+	"github.com/fzf-labs/fpkg/util/jsonutil"
+	"github.com/fzf-labs/fpkg/util/strutil"
+
 	"gorm.io/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"

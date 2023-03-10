@@ -4,10 +4,11 @@ import (
 	"fgzs-single/internal/app/admin/internal/config"
 	"fgzs-single/internal/app/admin/internal/middleware"
 	"fgzs-single/internal/core"
-	"fgzs-single/pkg/db"
 	"github.com/dtm-labs/rockscache"
+	"github.com/fzf-labs/fpkg/cache"
+	"github.com/fzf-labs/fpkg/cache/collectioncache"
+	"github.com/fzf-labs/fpkg/db"
 	goRedis "github.com/go-redis/redis/v8"
-	"github.com/zeromicro/go-zero/core/collection"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
 	"gorm.io/gorm"
@@ -20,7 +21,7 @@ type ServiceContext struct {
 	//go-redis
 	GoRedis *goRedis.Client
 	//进程内缓存
-	CollectionCache *collection.Cache
+	CollectionCache *collectioncache.Cache
 	//数据一致性缓存
 	RocksCache *rockscache.Client
 
@@ -30,18 +31,27 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	newGorm := db.NewGorm(&c.Gorm)
-	newRedis := core.NewRedis(c.Redis)
-	newGoRedis := core.NewGoRedis(c.Redis, 0)
+	newGormMysql, err := db.NewGormMysql(&c.Gorm)
+	if err != nil {
+		panic("NewGormMysql err")
+	}
+	newRedis, err := core.NewRedis(c.Redis)
+	if err != nil {
+		panic("NewRedis err")
+	}
+	newGoRedis, err := cache.NewGoRedis(c.Redis.Host, c.Redis.Pass, 0)
+	if err != nil {
+		panic("NewGoRedis err")
+	}
 	return &ServiceContext{
 		Config:           c,
-		Gorm:             newGorm,
+		Gorm:             newGormMysql,
 		Redis:            newRedis,
 		GoRedis:          newGoRedis,
-		CollectionCache:  core.NewDefaultCollectionCache(),
-		RocksCache:       core.NewRocksCache(newGoRedis),
+		CollectionCache:  cache.NewDefaultCollectionCache(),
+		RocksCache:       cache.NewRocksCache(newGoRedis),
 		JwtMiddleware:    middleware.NewJwtMiddleware(&c.Jwt, newRedis).Handle,
 		AuthMiddleware:   middleware.NewAuthMiddleware().Handle,
-		SysLogMiddleware: middleware.NewSysLogMiddleware(newGorm).Handle,
+		SysLogMiddleware: middleware.NewSysLogMiddleware(newGormMysql).Handle,
 	}
 }

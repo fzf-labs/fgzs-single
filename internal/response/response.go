@@ -3,7 +3,7 @@ package response
 import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
-	"fgzs-single/pkg/util/validutil"
+	"github.com/fzf-labs/fpkg/util/validutil"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"

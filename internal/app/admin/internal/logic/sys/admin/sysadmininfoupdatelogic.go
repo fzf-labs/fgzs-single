@@ -9,7 +9,7 @@ import (
 	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
-	"fgzs-single/pkg/crypt"
+	"github.com/fzf-labs/fpkg/crypt"
 	"gorm.io/gorm"
 	"strconv"
 
