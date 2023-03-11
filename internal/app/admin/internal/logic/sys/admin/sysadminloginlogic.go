@@ -56,7 +56,7 @@ func (l *SysAdminLoginLogic) SysAdminLogin(req *types.SysAdminLoginReq) (*types.
 	//颁发token
 	kv := make(map[string]interface{})
 	kv["uid"] = sysAdmin.ID
-	jwtClient := jwt.NewJwt(l.svcCtx.Redis, &l.svcCtx.Config.Jwt)
+	jwtClient := jwt.NewJwt(l.svcCtx.GoRedis, &l.svcCtx.Config.Jwt)
 	token, claims, err := jwtClient.GenerateToken(kv)
 	if err != nil {
 		return nil, err

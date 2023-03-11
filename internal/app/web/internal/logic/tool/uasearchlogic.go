@@ -2,7 +2,7 @@ package tool
 
 import (
 	"context"
-	userAgent "github.com/fzf-labs/fpkg/useragent"
+	"github.com/fzf-labs/fpkg/browser"
 	"github.com/jinzhu/copier"
 
 	"fgzs-single/internal/app/web/internal/svc"
@@ -27,7 +27,7 @@ func NewUaSearchLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UaSearch
 
 func (l *UaSearchLogic) UaSearch(req *types.UaSearchReq) (resp *types.UaSearchResp, err error) {
 	resp = new(types.UaSearchResp)
-	location := userAgent.UaSearch(req.Ua)
+	location := browser.UaParse(req.Ua)
 	resp.Ua = req.Ua
 	err = copier.Copy(&resp.Location, location)
 	if err != nil {

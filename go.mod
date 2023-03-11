@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/cascax/sql2gorm v0.0.2
 	github.com/dtm-labs/rockscache v0.1.0
-	github.com/fzf-labs/fpkg v1.1.0
+	github.com/fzf-labs/fpkg v1.1.1
 	github.com/go-redis/redis/v8 v8.11.6-0.20220405070650-99c79f7041fc
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gorilla/websocket v1.4.2
@@ -88,7 +88,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/mssola/user_agent v0.5.3 // indirect
 	github.com/nsqio/go-nsq v1.1.0 // indirect
 	github.com/onsi/ginkgo/v2 v2.4.0 // indirect
 	github.com/onsi/gomega v1.24.0 // indirect

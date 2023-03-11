@@ -50,7 +50,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		GoRedis:          newGoRedis,
 		CollectionCache:  cache.NewDefaultCollectionCache(),
 		RocksCache:       cache.NewRocksCache(newGoRedis),
-		JwtMiddleware:    middleware.NewJwtMiddleware(&c.Jwt, newRedis).Handle,
+		JwtMiddleware:    middleware.NewJwtMiddleware(&c.Jwt, newGoRedis).Handle,
 		AuthMiddleware:   middleware.NewAuthMiddleware().Handle,
 		SysLogMiddleware: middleware.NewSysLogMiddleware(newGormMysql).Handle,
 	}
