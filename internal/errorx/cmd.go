@@ -4,28 +4,25 @@ import (
 	"encoding/json"
 	"fgzs-single/internal/errorx/i18n"
 	"fmt"
-	"github.com/fzf-labs/fpkg/third_api/baiduai"
 	"github.com/fzf-labs/fpkg/util/fileutil"
 	"sort"
 	"strconv"
 )
 
 func Export() {
-	list := data()
+	list := exportData()
 	exportJson(list)
 	exportMarkdown(list)
 }
 
 // 数据生成
-func data() []map[string]string {
+func exportData() []map[string]string {
 	ids := make([]int, 0)
 	for i := range BusinessErrs {
 		ids = append(ids, i)
 	}
 	sort.Ints(ids)
 	list := make([]map[string]string, 0)
-	tranList := make(map[string]map[string]string)
-	accessToken := baiduai.GetAccessToken()
 	for _, i := range ids {
 		m := make(map[string]string)
 		m["http_code"] = strconv.Itoa(BusinessErrs[i].GetHttpCode())
@@ -38,22 +35,6 @@ func data() []map[string]string {
 				continue
 			}
 			m[v] = BusinessErrs[i].GetMessage(v)
-			if m[v] == "" {
-				if zhCNMsg != "" {
-					if _, ok := tranList[zhCNMsg][v]; ok {
-						m[v] = tranList[zhCNMsg][v]
-					} else {
-						message, err := baiduai.TextTrans(accessToken, zhCNMsg, v)
-						fmt.Println(err)
-						_, ok := tranList[zhCNMsg]
-						if !ok {
-							tranList[zhCNMsg] = make(map[string]string)
-						}
-						tranList[zhCNMsg][v] = message
-						m[v] = message
-					}
-				}
-			}
 		}
 		list = append(list, m)
 	}
