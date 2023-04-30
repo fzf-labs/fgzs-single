@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"github.com/spf13/viper"
 	"log"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/spf13/viper"
 )
 
 type MysqlDsn struct {

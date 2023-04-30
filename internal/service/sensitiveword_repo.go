@@ -5,11 +5,12 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/define/cachekey"
 	"fgzs-single/internal/errorx"
+	"sync"
+
 	"github.com/dtm-labs/rockscache"
 	"github.com/fzf-labs/fpkg/util/jsonutil"
 	"github.com/importcjj/sensitive"
 	"gorm.io/gorm"
-	"sync"
 )
 
 var _ iSensitiveWordService = (*SensitiveWordService)(nil)

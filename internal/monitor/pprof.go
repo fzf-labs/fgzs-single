@@ -1,8 +1,9 @@
 package monitor
 
 import (
-	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type pprofServer struct {

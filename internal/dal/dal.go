@@ -2,6 +2,7 @@ package dal
 
 import (
 	"fgzs-single/internal/errorx"
+
 	"gorm.io/gorm"
 )
 

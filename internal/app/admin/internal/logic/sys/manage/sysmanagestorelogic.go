@@ -7,6 +7,7 @@ import (
 	"fgzs-single/internal/dal/dao"
 	"fgzs-single/internal/dal/model"
 	"fgzs-single/internal/errorx"
+
 	"github.com/fzf-labs/fpkg/crypt"
 	avatar2 "github.com/fzf-labs/fpkg/third_api/avatar"
 	"github.com/fzf-labs/fpkg/util/jsonutil"

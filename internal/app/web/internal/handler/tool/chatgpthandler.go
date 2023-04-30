@@ -2,12 +2,13 @@ package tool
 
 import (
 	"fgzs-single/internal/app/web/internal/svc"
+	"net/http"
+	"time"
+
 	"github.com/fzf-labs/fpkg/cache/collectioncache"
 	"github.com/fzf-labs/fpkg/third_api/openai"
 	"github.com/fzf-labs/fpkg/util/uuidutil"
 	"github.com/gorilla/websocket"
-	"net/http"
-	"time"
 )
 
 func ChatGPTHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

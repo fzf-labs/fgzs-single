@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/zeromicro/go-zero/tools/goctl/api/parser"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/zeromicro/go-zero/tools/goctl/api/parser"
 )
 
 var fileName = "internal/app/admin/desc/admin.api"

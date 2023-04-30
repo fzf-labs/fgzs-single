@@ -3,15 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"path/filepath"
+	"strings"
+	"unicode"
+
 	"github.com/spf13/viper"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gorm"
-	"path/filepath"
-	"strings"
-	"unicode"
 )
 
 var dataMap = map[string]func(detailType string) (dataType string){

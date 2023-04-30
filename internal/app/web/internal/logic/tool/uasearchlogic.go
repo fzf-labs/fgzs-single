@@ -2,6 +2,7 @@ package tool
 
 import (
 	"context"
+
 	"github.com/fzf-labs/fpkg/browser"
 	"github.com/jinzhu/copier"
 

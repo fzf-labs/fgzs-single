@@ -7,10 +7,11 @@ import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/response"
+	"net/http"
+
 	"github.com/fzf-labs/fpkg/util/iputil"
 	"github.com/fzf-labs/fpkg/validatorx"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"net/http"
 )
 
 func IpLocationHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

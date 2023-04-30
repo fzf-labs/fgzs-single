@@ -1,8 +1,9 @@
 package cachekey
 
 import (
-	"github.com/fzf-labs/fpkg/cache"
 	"time"
+
+	"github.com/fzf-labs/fpkg/cache"
 )
 
 // 缓存key前缀

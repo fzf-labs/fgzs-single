@@ -2,8 +2,9 @@ package system
 
 import (
 	"context"
-	"github.com/fzf-labs/fpkg/cache"
 	"strings"
+
+	"github.com/fzf-labs/fpkg/cache"
 
 	"fgzs-single/internal/app/admin/internal/svc"
 	"fgzs-single/internal/app/admin/internal/types"

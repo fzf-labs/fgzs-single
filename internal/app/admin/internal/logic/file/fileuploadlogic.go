@@ -8,15 +8,16 @@ import (
 	"fgzs-single/internal/dal/model"
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
-	"github.com/fzf-labs/fpkg/oss"
-	"github.com/fzf-labs/fpkg/util/fileutil"
-	"github.com/fzf-labs/fpkg/util/uuidutil"
-	"gorm.io/gorm"
 	"io"
 	"mime/multipart"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/fzf-labs/fpkg/oss"
+	"github.com/fzf-labs/fpkg/util/fileutil"
+	"github.com/fzf-labs/fpkg/util/uuidutil"
+	"gorm.io/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

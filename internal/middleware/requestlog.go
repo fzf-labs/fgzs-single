@@ -5,11 +5,12 @@ import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/response"
+	"io"
+	"net/http"
+
 	"github.com/fzf-labs/fpkg/util/jsonutil"
 	"github.com/tidwall/gjson"
 	"github.com/zeromicro/go-zero/core/logx"
-	"io"
-	"net/http"
 )
 
 type RequestLogMiddleware struct {

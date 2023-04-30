@@ -2,11 +2,12 @@ package tool
 
 import (
 	"fgzs-single/internal/app/web/internal/svc"
-	"github.com/fzf-labs/fpkg/third_api/openai"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/fzf-labs/fpkg/third_api/openai"
+	"github.com/gorilla/websocket"
 )
 
 func WebsocketHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

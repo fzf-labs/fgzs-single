@@ -3,11 +3,12 @@ package response
 import (
 	"fgzs-single/internal/define/constant"
 	"fgzs-single/internal/errorx"
+	"net/http"
+
 	"github.com/fzf-labs/fpkg/util/validutil"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"net/http"
 )
 
 // H is a shortcut for map[string]interface{}

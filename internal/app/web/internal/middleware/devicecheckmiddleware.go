@@ -7,8 +7,9 @@ import (
 	"fgzs-single/internal/errorx"
 	"fgzs-single/internal/meta"
 	"fgzs-single/internal/response"
-	"github.com/fzf-labs/fpkg/crypt"
 	"net/http"
+
+	"github.com/fzf-labs/fpkg/crypt"
 )
 
 type DeviceCheckMiddleware struct {
